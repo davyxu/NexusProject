@@ -1,0 +1,98 @@
+Shader FX分析
+
+Node
+	TextureSampler
+		Input: 
+			UV Coords 纹理坐标
+			Sampler 未知
+		Output:
+			RGBA...
+			
+	
+	
+	UVController
+		
+		
+		
+sample_global_illumination.SFX
+
+Tex2D本身就是Sampler, 节点本身的Sampler功能不明
+UVCoords 在默认情况下,取自模型第一层纹理坐标
+
+带纹理的光照公式
+float4 DiffuseTexture = tex2D(DiffuseTextureSampler, In.texCoord.xy);
+float3 diffuseColor = DiffuseTexture.rgb * saturate(NdotL);
+	
+	
+Normal通道的使用
+默认情况下Normal通道为
+float3 N = float3(0.0, 0.0, 1.0);
+可以接入模型的Noraml
+也可以 使用NormalMap提供的Normal
+float4 NormalMap = tex2D(NormalMapSampler, In.texCoord.xy);
+	NormalMap.xyz = NormalMap.xyz * 2 - 1;		//expand to -1 to 1 range 
+	NormalMap.rgb = normalize(NormalMap.rgb); 		//normalized the normal vector 
+	float3 input8 = NormalMap.rgb; 
+
+	float3 N = input8;
+
+每个结点只能有1条线连接	
+
+
+VS中的顶点多定义不会多生成汇编代码
+
+
+
+我准备这样设计我的材质系统:  用编辑器编辑的通用材质就像是一个带有插槽的处理管线一样,输入的是 纹理插槽等, 但只有通用材质不能用. 插件会导出一个材质文件,里面包含有这个模型里包含的所有纹理, 导入编辑器后,能看到一个默认材质的模型,然后将模型材质与通用材质关联,连接好纹理插槽之类的(自动), 就生成一个材质实例,模型用这个实例就能绘制出正确的效果. 更换通用材质,就会马上改变渲染效果
+
+模型材质导出中没有指定父材质,
+
+
+MaterialInstance File:
+TextureName0
+TextureName1
+"#EnviormentMap"		// Scene产生纹理
+...
+
+MaterialName0
+MaterialName1
+...
+
+ParameterType: ParameterData0
+ParameterType: ParameterData1
+...
+
+MaterialInstance0			序号用于SubMesh或者Particle的材质索引
+	TextureUseList:
+	0: TextureIndex0;
+	1: TextureIndex1;
+	...
+	
+	ParameterUseList:
+	Parameter0
+	Parameter1
+	...
+MaterialInstance1
+...
+
+	
+	
+
+	
+MaterialInstance 包含:
+	RenderTexture
+	对应Material的各种对Art公开的参数数值
+	
+	
+MaterialInstance 与Material都是名字区分,相同名字视为同1个
+	
+
+MaterialInstance 中只保存Material的名称，Material由ShaderFile提供，  ShaderFile由 Material系统生成
+	
+
+dword Tex = Compiler->Texture2DSampler( 0 );
+
+dword Color = Compiler->Constant4( );
+
+dword Mixed = Compiler->Add( Tex, Color );
+

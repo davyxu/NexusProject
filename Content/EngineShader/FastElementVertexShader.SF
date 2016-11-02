@@ -1,0 +1,19 @@
+#define VERTEX_COUNT 80
+
+float4 PositionBuffer[VERTEX_COUNT];
+float2 UVBuffer[VERTEX_COUNT];
+float4 ColorBuffer[VERTEX_COUNT];
+
+float4x4 Transform;
+
+void Main(
+	in float InIndex : TEXCOORD0,
+	out float4 OutPosition : POSITION,
+	out float2 OutTexCoord : TEXCOORD1,
+	out float4 OutColor : COLOR0
+	)
+{
+	OutPosition = mul( PositionBuffer[ InIndex ] , Transform );
+	OutColor = ColorBuffer[ InIndex ];
+	OutTexCoord = UVBuffer[ InIndex ];
+}

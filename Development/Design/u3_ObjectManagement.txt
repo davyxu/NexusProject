@@ -1,0 +1,51 @@
+对象使用UObject管理
+
+FName UObject::MakeUniqueObjectName( UObject* Parent, UClass* Class, UObject* Archetype )
+{
+	check(Class);
+
+	// cache the class's name's index for faster name creation later
+	EName ClassNameIndex = (EName)Class->GetFName().GetIndex();
+	FName TestName;
+	do
+	{
+		// create the next name in the sequence for this class
+		TestName = FName(ClassNameIndex, ++Class->ClassUnique);
+	} 
+	while( StaticFindObjectFastInternal( NULL, Parent, TestName, FALSE, Parent==ANY_PACKAGE, 0 ) );
+
+	return TestName;
+}
+
+
+此函数用于获得一个唯一的名称，名称的组成为Class的FName外加一个Number，速度很快
+
+使用StaticFindObjectFastInternal查找这个名称是否重复，直到找到一个不重复的名称为止
+这里考虑ClassUnique是不会保存的，因此如果一个文件中的对象已经分配了一段名称，这个函数将会耗用一些时间来查找，但是Number本身的循环不会有问题
+
+
+Object的名称没有时，自动使用ClassName加Number自动生成，如果有制定，则在库中查找已经存在的对象
+如果对象已经存在，需要做一些操作，重新使用这个对象
+
+
+FObjectInstancingGraph* InstanceGraph 的作用，大概是将对象实例按照类型进行分类管理
+
+AddObject中将Object放入ObjObjects的数组中，Index由Avialuable提供，并HashObject
+
+Object的析构函数做逆向过程
+
+GC垃圾回收过程
+UnobjGC.cpp void UObject::IncrementalPurgeGarbage( UBOOL bUseTimeLimit, FLOAT TimeLimit )
+
+GObjCurrentPurgeObjectIndex 控制回收进程，相对GObjObjects容器
+
+检查物体如果不可及，检查异步资源已经可以卸载，调用ConditionalFinishDestroy->BeginDestroy 这里会从hash表内断开
+
+GObjCurrentPurgeObjectIndex++
+
+检查当前回收时间是否超标
+
+
+整个GObjObjects中，会有null的object，但是数组只会增长，不会缩减
+
+Actor拥有UActorComponent，可以是

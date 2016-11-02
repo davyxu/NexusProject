@@ -1,0 +1,113 @@
+BachedElement类是最容易看懂虚幻Shader及基本渲染流程的类
+
+
+// 用于点,线的顶点格式, 直接送到D3D的格式
+struct FSimpleElementVertex
+{
+	FVector4 Position;
+	FVector2D TextureCoordinate;
+	FLinearColor Color;
+	FColor HitProxyIdColor;
+
+	FSimpleElementVertex(const FVector4& InPosition,const FVector2D& InTextureCoordinate,const FLinearColor& InColor,FHitProxyId InHitProxyId):
+		Position(InPosition),
+		TextureCoordinate(InTextureCoordinate),
+		Color(InColor),
+		HitProxyIdColor(InHitProxyId.GetColor())
+	{}
+};
+
+
+
+	struct FBatchedPoint
+	{
+		FVector Position;
+		FLOAT Size;
+		FColor Color;
+		FHitProxyId HitProxyId;
+	};
+	
+		struct FBatchedPoint
+	{
+		FVector Position;
+		FLOAT Size;
+		FColor Color;
+		FHitProxyId HitProxyId;
+	};
+	
+	这类结构为AddXXX系列函数保存的批处理数据,不能放入D3D
+	
+	
+BatchedElements 有2种绘制 2D面的方法
+1. AddSprite
+  这种方法从代码使用率来说并不是很多,应该是某人造的轮子
+  
+  BatchedElements.AddSprite(Position,SizeX,SizeY,Sprite,Color,HitProxyId);
+
+2. 构造顶点,使用AddTriangle
+  这种方法因为最小单位基于三角面,因此适用面非常广,自己需要构造的多边形绘制都可以使用这个方法
+  
+  
+  void DrawTile(
+	FCanvas* Canvas,
+	FLOAT X,
+	FLOAT Y,
+	FLOAT SizeX,
+	FLOAT SizeY,
+	FLOAT U,
+	FLOAT V,
+	FLOAT SizeU,
+	FLOAT SizeV,
+	const FLinearColor& Color,
+	const FTexture* Texture,
+	UBOOL AlphaBlend
+	)
+{
+
+	FLinearColor ActualColor = Color;
+	ActualColor.A *= Canvas->AlphaModulate;
+
+	// 决定使用什么纹理
+	const FTexture* FinalTexture = Texture ? Texture : GWhiteTexture;
+	const EBlendMode BlendMode = AlphaBlend ? BLEND_Translucent : BLEND_Opaque;
+	FBatchedElements* BatchedElements = Canvas->GetBatchedElements(FCanvas::ET_Triangle, FinalTexture, BlendMode);
+	FHitProxyId HitProxyId = Canvas->GetHitProxyId();
+
+	// 添加顶点,这里添加进的是MeshVertices数组
+	INT V00 = BatchedElements->AddVertex(FVector4(X,		Y,			0,1),FVector2D(U,			V),			ActualColor,HitProxyId);
+	INT V10 = BatchedElements->AddVertex(FVector4(X + SizeX,Y,			0,1),FVector2D(U + SizeU,	V),			ActualColor,HitProxyId);
+	INT V01 = BatchedElements->AddVertex(FVector4(X,		Y + SizeY,	0,1),FVector2D(U,			V + SizeV),	ActualColor,HitProxyId);
+	INT V11 = BatchedElements->AddVertex(FVector4(X + SizeX,Y + SizeY,	0,1),FVector2D(U + SizeU,	V + SizeV),	ActualColor,HitProxyId);
+	
+	// 这里实际上是在构造索引缓冲
+	BatchedElements->AddTriangle(V00,V10,V11,FinalTexture,BlendMode);
+	BatchedElements->AddTriangle(V00,V11,V01,FinalTexture,BlendMode);
+}
+
+
+
+线条的顶点被添加入LineVertices结构
+void FBatchedElements::AddLine(const FVector& Start,const FVector& End,const FLinearColor& Color,FHitProxyId HitProxyId)
+{
+	// Ensure the line isn't masked out.  Some legacy code relies on Color.A being ignored.
+	FLinearColor OpaqueColor(Color);
+	OpaqueColor.A = 1;
+
+	new(LineVertices) FSimpleElementVertex(Start,FVector2D(0,0),OpaqueColor,HitProxyId);
+	new(LineVertices) FSimpleElementVertex(End,FVector2D(0,0),OpaqueColor,HitProxyId);
+}
+
+
+绘制时,需要提供一个变换矩阵, 这样更大的扩充了BatchedElements的使用范围, 使用一个类,只要换不同的矩阵,就可以实现2D和3D多边形的绘制
+
+UBOOL FBatchedElements::Draw(FCommandContextRHI* Context,const FMatrix& Transform,UINT ViewportSizeX,UINT ViewportSizeY,UBOOL bHitTesting,FLOAT Gamma) const
+{
+	计算View的逆矩阵
+	设置渲染状态及矩阵
+	批量绘制点和线
+	批量绘制Sprite
+	批量绘制多边形
+}
+
+
+亮点: 只要是同纹理同属性的多边形,绘制速度只是1次DrawUP, AddTriangle函数实现了一种材质分组及批量绘制的很好的算法

@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Other">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{8896dfa5-f8bc-452f-92ab-53eb18757053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Header Files">
+      <UniqueIdentifier>{96e641cb-a4a1-4a03-a470-528e5ccaeaf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model\Source Files">
+      <UniqueIdentifier>{b5294d1b-1a06-4b18-9abb-e6ab9ac865e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{033a70a6-b9b8-4a28-9c7c-89144440ad2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Header Files">
+      <UniqueIdentifier>{c027b11d-854c-40c0-9938-5f576a9c5a82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer\Source Files">
+      <UniqueIdentifier>{ce4f33df-fb55-4f0f-9219-d321795618ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material">
+      <UniqueIdentifier>{6af35353-c79a-4ef4-8304-1db6c729a3aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material\Header Files">
+      <UniqueIdentifier>{5de4b8de-dadf-46a7-8fc1-62afde85873e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Material\Source Files">
+      <UniqueIdentifier>{dc89462b-c4e4-4690-b6c0-8a87bf454e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{6c9807e6-db42-4b97-81b4-2f59a2b7fecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Header Files">
+      <UniqueIdentifier>{66793caa-7e71-4a3a-b03e-eb84d22c783b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Source Files">
+      <UniqueIdentifier>{d9b9ab0c-4b37-4c98-a432-13d6174cad5f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EngineInitializer.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePCH.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationResource.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshResource.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMaterialShader.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletonMeshComponent.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletonMeshResource.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshComponent.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshResource.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BatchedElement.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraController.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalShaderFactory.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HitProxy.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PresentWindow.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderFont.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderQueue.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderResource.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTexture.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderThread.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderUtility.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneView.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderCompiler.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMaster.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureResource.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexFactory.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexFormat.cpp">
+      <Filter>Renderer\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialCompiler.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialDescriptor.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialGen.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialInstance.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialNode.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialParameter.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialShader.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialShaderFactory.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialSlot.cpp">
+      <Filter>Material\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorFactory.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorFamily.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AsyncTaskThread.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraActor.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCommon.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagedObject.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageInputDriver.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovableObject.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceLocation.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tickable.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPick.cpp">
+      <Filter>System\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Include\Engine\EngineInitializer.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePCH.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Animation.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\AnimationResource.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MeshComponent.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MeshResource.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ModelMaterialShader.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Skeleton.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\SkeletonMeshComponent.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\SkeletonMeshResource.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\StaticMeshComponent.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\StaticMeshResource.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\BatchedElement.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\CameraController.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Canvas.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\GlobalShaderFactory.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\HitProxy.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\PresentWindow.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderFont.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderQueue.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderResource.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderState.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderStateWrapper.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderTarget.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderTexture.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderThread.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RenderUtility.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\RHI.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\SceneView.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ShaderCompiler.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ShaderMaster.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\TextureResource.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\VertexFactory.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\VertexFormat.h">
+      <Filter>Renderer\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialCompiler.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialDefine.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialDescriptor.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialGen.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialInstance.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialNode.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialParameter.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialShader.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialShaderFactory.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MaterialSlot.h">
+      <Filter>Material\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Actor.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ActorComponent.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ActorFactory.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ActorFamily.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\AsyncTaskThread.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\CameraActor.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\EngineCommon.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\FileVersion.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\GameEngine.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\GameWorld.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ManagedObject.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MessageInputDriver.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\MovableObject.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\ResourceLocation.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Scene.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\Tickable.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Engine\WorldPick.h">
+      <Filter>System\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoEngine.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Extend.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Material.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Model.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Render.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_System.h" />
+  </ItemGroup>
+</Project>

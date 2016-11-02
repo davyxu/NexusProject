@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Other">
+      <UniqueIdentifier>{392d1459-e571-478a-a547-ac4935238929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo">
+      <UniqueIdentifier>{02df7000-9824-42ff-aa39-570a064b1af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\Header Files">
+      <UniqueIdentifier>{e565182c-831a-4c60-98a8-35a1bead6f1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Demo\Source Files">
+      <UniqueIdentifier>{6013a5f1-f823-43dc-9edf-f8e65955b666}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DemoLauncher.rc">
+      <Filter>Other</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EngineDemoPCH.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Canvas.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Font.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Material.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Model.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Persistence.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Pick.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_RenderTarget.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Demo_Transform.cpp">
+      <Filter>Demo\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EngineDemoPCH.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="PCH_Scene.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Canvas.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Font.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Material.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Model.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Persistence.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Pick.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_RenderTarget.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Demo_Transform.h">
+      <Filter>Demo\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Engine\Source\Engine\neko.ico">
+      <Filter>Other</Filter>
+    </None>
+  </ItemGroup>
+</Project>

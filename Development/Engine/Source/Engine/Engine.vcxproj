@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8D44684C-BC93-42BF-9ED1-0EDE9D06CC8F}</ProjectGuid>
+    <RootNamespace>Engine</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\Lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\Obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\Lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\Obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\SDK\freetype-2.4.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)nk$(ProjectName)_d.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\..\include;..\..\..\SDK\freetype-2.4.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>EnginePCH.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)nk$(ProjectName).lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="EngineInitializer.cpp" />
+    <ClCompile Include="EnginePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationResource.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
+    <ClCompile Include="MeshResource.cpp" />
+    <ClCompile Include="ModelMaterialShader.cpp" />
+    <ClCompile Include="Skeleton.cpp" />
+    <ClCompile Include="SkeletonMeshComponent.cpp" />
+    <ClCompile Include="SkeletonMeshResource.cpp" />
+    <ClCompile Include="StaticMeshComponent.cpp" />
+    <ClCompile Include="StaticMeshResource.cpp" />
+    <ClCompile Include="BatchedElement.cpp" />
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="GlobalShaderFactory.cpp" />
+    <ClCompile Include="HitProxy.cpp" />
+    <ClCompile Include="PresentWindow.cpp" />
+    <ClCompile Include="RenderFont.cpp" />
+    <ClCompile Include="RenderQueue.cpp" />
+    <ClCompile Include="RenderResource.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
+    <ClCompile Include="RenderTexture.cpp" />
+    <ClCompile Include="RenderThread.cpp" />
+    <ClCompile Include="RenderUtility.cpp" />
+    <ClCompile Include="RHI.cpp" />
+    <ClCompile Include="SceneView.cpp" />
+    <ClCompile Include="ShaderCompiler.cpp" />
+    <ClCompile Include="ShaderMaster.cpp" />
+    <ClCompile Include="TextureResource.cpp" />
+    <ClCompile Include="VertexFactory.cpp" />
+    <ClCompile Include="VertexFormat.cpp" />
+    <ClCompile Include="MaterialCompiler.cpp" />
+    <ClCompile Include="MaterialDescriptor.cpp" />
+    <ClCompile Include="MaterialGen.cpp" />
+    <ClCompile Include="MaterialInstance.cpp" />
+    <ClCompile Include="MaterialNode.cpp" />
+    <ClCompile Include="MaterialParameter.cpp" />
+    <ClCompile Include="MaterialShader.cpp" />
+    <ClCompile Include="MaterialShaderFactory.cpp" />
+    <ClCompile Include="MaterialSlot.cpp" />
+    <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="ActorComponent.cpp" />
+    <ClCompile Include="ActorFactory.cpp" />
+    <ClCompile Include="ActorFamily.cpp" />
+    <ClCompile Include="AsyncTaskThread.cpp" />
+    <ClCompile Include="CameraActor.cpp" />
+    <ClCompile Include="EngineCommon.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="ManagedObject.cpp" />
+    <ClCompile Include="MessageInputDriver.cpp" />
+    <ClCompile Include="MovableObject.cpp" />
+    <ClCompile Include="ResourceLocation.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Tickable.cpp" />
+    <ClCompile Include="WorldPick.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Include\Engine\EngineInitializer.h" />
+    <ClInclude Include="EnginePCH.h" />
+    <ClInclude Include="..\..\Include\Engine\Animation.h" />
+    <ClInclude Include="..\..\Include\Engine\AnimationResource.h" />
+    <ClInclude Include="..\..\Include\Engine\MeshComponent.h" />
+    <ClInclude Include="..\..\Include\Engine\MeshResource.h" />
+    <ClInclude Include="..\..\Include\Engine\ModelMaterialShader.h" />
+    <ClInclude Include="..\..\Include\Engine\Skeleton.h" />
+    <ClInclude Include="..\..\Include\Engine\SkeletonMeshComponent.h" />
+    <ClInclude Include="..\..\Include\Engine\SkeletonMeshResource.h" />
+    <ClInclude Include="..\..\Include\Engine\StaticMeshComponent.h" />
+    <ClInclude Include="..\..\Include\Engine\StaticMeshResource.h" />
+    <ClInclude Include="..\..\Include\Engine\BatchedElement.h" />
+    <ClInclude Include="..\..\Include\Engine\CameraController.h" />
+    <ClInclude Include="..\..\Include\Engine\Canvas.h" />
+    <ClInclude Include="..\..\Include\Engine\GlobalShaderFactory.h" />
+    <ClInclude Include="..\..\Include\Engine\HitProxy.h" />
+    <ClInclude Include="..\..\Include\Engine\PresentWindow.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderFont.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderQueue.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderResource.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderState.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderStateWrapper.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderTarget.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderTexture.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderThread.h" />
+    <ClInclude Include="..\..\Include\Engine\RenderUtility.h" />
+    <ClInclude Include="..\..\Include\Engine\RHI.h" />
+    <ClInclude Include="..\..\Include\Engine\SceneView.h" />
+    <ClInclude Include="..\..\Include\Engine\ShaderCompiler.h" />
+    <ClInclude Include="..\..\Include\Engine\ShaderMaster.h" />
+    <ClInclude Include="..\..\Include\Engine\TextureResource.h" />
+    <ClInclude Include="..\..\Include\Engine\VertexFactory.h" />
+    <ClInclude Include="..\..\Include\Engine\VertexFormat.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialCompiler.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialDefine.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialDescriptor.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialGen.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialInstance.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialNode.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialParameter.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialShader.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialShaderFactory.h" />
+    <ClInclude Include="..\..\Include\Engine\MaterialSlot.h" />
+    <ClInclude Include="..\..\Include\Engine\Actor.h" />
+    <ClInclude Include="..\..\Include\Engine\ActorComponent.h" />
+    <ClInclude Include="..\..\Include\Engine\ActorFactory.h" />
+    <ClInclude Include="..\..\Include\Engine\ActorFamily.h" />
+    <ClInclude Include="..\..\Include\Engine\AsyncTaskThread.h" />
+    <ClInclude Include="..\..\Include\Engine\CameraActor.h" />
+    <ClInclude Include="..\..\Include\Engine\EngineCommon.h" />
+    <ClInclude Include="..\..\Include\Engine\FileVersion.h" />
+    <ClInclude Include="..\..\Include\Engine\GameEngine.h" />
+    <ClInclude Include="..\..\Include\Engine\GameWorld.h" />
+    <ClInclude Include="..\..\Include\Engine\ManagedObject.h" />
+    <ClInclude Include="..\..\Include\Engine\MessageInputDriver.h" />
+    <ClInclude Include="..\..\Include\Engine\MovableObject.h" />
+    <ClInclude Include="..\..\Include\Engine\ResourceLocation.h" />
+    <ClInclude Include="..\..\Include\Engine\Scene.h" />
+    <ClInclude Include="..\..\Include\Engine\Tickable.h" />
+    <ClInclude Include="..\..\Include\Engine\WorldPick.h" />
+    <ClInclude Include="..\..\Include\NekoEngine.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Extend.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Material.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Model.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_Render.h" />
+    <ClInclude Include="..\..\Include\NekoEngine_System.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.vcxproj">
+      <Project>{c84dc954-d20d-48a2-b88f-521f522af8c5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,50 @@
+
+IStream 抽象内容访问
+	<ByteStream		用于网络包及小内存频繁构造流的缓冲内存流（支持stack，heap）
+	<MemoryStream	直接heap缓冲的内存流
+		<FileStream	文件
+		<IniFile	INI文件读取
+		
+		
+MemoryStream 基本内存访问及抽象接口  支持 WriteBuffer, WriteXXX
+		RefStream		引用方式
+		HeapStream		堆方式
+		StackStream		使用模板构造栈大小，内存使用优先度 stack->heap
+		FileStream		文件使用接口
+		
+Seriliazer	使用MemoryStream。 用途：存盘，文件格式，不推荐使用在网络，支持<<，>>操作符 和WriteBuffer
+	BinSeriliazer
+	TextSeriliazer
+	
+void OnNetworkPackage( byte* data, dword size )
+{
+	DeferStream( &RefStream( data, size) )	<- use memorystream
+}
+
+
+void SendData( )
+{
+	StackStream<1024> s;
+	s.WriteXXX()
+	
+	network->Send( &s );
+	
+	HeapStream ss;
+	ss.WriteXXX()
+	network->Send( &ss );
+}
+
+void FileAccess()
+{
+	FileStream f("xxx",ReadMode);
+	
+	ParseViaFile( &f )  <- use memorystream
+	
+	MemoryStream* m = f.GetBuffer()	// 堆方式缓冲到内存
+	
+	ParseViaMemory( &f )
+}
+
+
+Serializer& opeartor<<(Serializer& sr, vector& vec)
+Serializer& operator<<(...)

@@ -1,0 +1,13 @@
+
+sampler2D Texture;
+
+
+void Main(
+	in float2 TextureCoordinate : TEXCOORD0,
+	//in float4 InNormal : COLOR0,
+	out float4 OutColor : COLOR
+	)
+{
+	OutColor = tex2D(Texture,TextureCoordinate);	
+	//OutColor = InNormal;
+}

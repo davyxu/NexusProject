@@ -1,0 +1,15 @@
+#pragma once
+
+namespace NekoEngine
+{
+	#define FILE_VER_MESH					5
+	#define FILE_VER_SKIN					2
+	#define FILE_VER_ANIMATION				2
+	#define FILE_VER_MATERIAL_DESCRIPTOR				3
+	#define FILE_VER_MATERIAL_INS			2
+	#define FILE_VER_SHADERCACHE			2
+	#define FILE_VER_GLOBAL_SHADERCACHE		1
+	#define FILE_VER_MATERIAL_SHADERCACHE	1
+	#define FILE_VER_MATERIAL_SHADERINDEX	1
+	#define FILE_VER_SCENE					1
+}

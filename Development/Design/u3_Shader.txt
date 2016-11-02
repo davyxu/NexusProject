@@ -1,0 +1,80 @@
+1. Shader变量的绑定及设置
+
+派生FShader类,在构造函数中Bind变量
+重载SetParameters实现参数设置
+
+2. 通过宏IMPLEMENT_SHADER_TYPE 将Shader回调注册到Shader系统中
+
+#define IMPLEMENT_SHADER_TYPE(ShaderClass,SourceFilename,FunctionName,Frequency,MinPackageVersion) \
+	ShaderClass::ShaderMetaType ShaderClass::StaticType( \
+		TEXT(#ShaderClass), \
+		SourceFilename, \
+		FunctionName, \
+		Frequency, \
+		MinPackageVersion, \
+		ShaderClass::ConstructSerializedInstance, \
+		ShaderClass::ConstructCompiledInstance, \
+		ShaderClass::ModifyCompilationEnvironment, \
+		ShaderClass::ShouldCache \
+		);
+		
+第二个参数决定这个Shader的归类, 这些meta信息由FShaderType类保存
+
+并保存在TLinkedList<FShaderType*>*& FShaderType::GetTypeList()这个列表中
+
+3. 编译某种Type的Shader, 这里用GlobalShaderType做例子
+
+参见:
+void RecompileGlobalShaders()
+
+	TShaderMap<FGlobalShaderType>* GlobalShaderMap = GetGlobalShaderMap(Platform);
+	for(TLinkedList<FShaderType*>::TIterator ShaderTypeIt(FShaderType::GetTypeList());ShaderTypeIt;ShaderTypeIt.Next())
+	{
+		FGlobalShaderType* GlobalShaderType = ShaderTypeIt->GetGlobalShaderType();
+		if(GlobalShaderType && GlobalShaderType->ShouldCache(Platform))
+		{
+			if(!GlobalShaderMap->HasShader(GlobalShaderType))
+			{
+				// Compile this global shader type.
+				TArray<FString> ShaderErrors;
+				FShader* Shader = GlobalShaderType->CompileShader(Platform,ShaderErrors);
+				if(Shader)
+				{
+					// Add the new global shader instance to the global shader map.
+					// This will cause FShader::AddRef to be called, which will cause BeginInitResource(Shader) to be called.
+					GlobalShaderMap->AddShader(GlobalShaderType,Shader);
+
+				}
+				else
+				{
+					appErrorf(TEXT("Failed to compile global shader %s"), GlobalShaderType->GetName());
+				}
+			}
+		}
+	}
+	GGlobalShaderMap[Platform]->BeginInit();
+	
+	
+各种类型的Shader的Compile会被调用
+FShader* FGlobalShaderType::CompileShader(EShaderPlatform Platform,TArray<FString>& OutErrors)
+{
+	// Construct the shader environment.
+	FShaderCompilerEnvironment Environment;
+
+	// 调用D3D层的编译
+	FShaderCompilerOutput Output;
+	if(!FShaderType::CompileShader(Platform,Environment,Output))
+	{
+		OutErrors = Output.Errors;
+		return NULL;
+	}
+
+	// 避免相同的代码
+	FShader* Shader = FindShaderByCode(Output.Code);
+	if(!Shader)
+	{		
+		// 调用用户的构造函数,进行bind
+		Shader = (*ConstructCompiledRef)(CompiledShaderInitializerType(this,Output));
+	}
+	return Shader;
+}

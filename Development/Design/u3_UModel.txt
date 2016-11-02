@@ -1,0 +1,64 @@
+UModel
+
+1. 初始化
+	构造时调用UpdateVertices进行VB及VertexFactory的初始化
+	
+	
+2. 资源线程同步
+	FRenderCommandFence ReleaseResourcesFence;
+	
+	资源卸载开始时
+	ReleaseResourcesFence.BeginFence();
+	在构造时，必须等待上次资源卸载后，方可卸载
+	
+	void UModel::UpdateVertices()
+	{
+		// Wait for pending resource release commands to execute.
+		ReleaseResourcesFence.Wait();
+		...
+	}
+	
+	
+	
+3. VB建立过程
+	UModel::BuildVertexBuffers() 
+	从FModelVertexBuffer VertexBuffer提取数组指针
+	FModelVertex* DestVertex = (FModelVertex*)VertexBuffer.Vertices.GetData();
+	
+	遍历所有的模型BSPNode，将其全部填充到VB中
+	for(INT NodeIndex = 0;NodeIndex < Nodes.Num();NodeIndex++)
+	{
+	...
+	DestVertex->Position = Position;
+				DestVertex->TexCoord.X = ((Position - TextureBase) | TextureX) / 128.0f;
+				DestVertex->TexCoord.Y = ((Position - TextureBase) | TextureY) / 128.0f;
+				DestVertex->ShadowTexCoord = Vert.ShadowTexCoord;
+				DestVertex->TangentX = TextureXNormalized;
+				DestVertex->TangentY = TextureYNormalized;
+				DestVertex->TangentZ = Normal;
+	...
+	
+	
+	}
+	
+	调用BeginInitResource(&VertexBuffer);
+
+	创建VB，并将Resource数组填充到VB中，这个与unreal2.5中原理类似
+	void FModelVertexBuffer::InitRHI()
+	{
+		// Calculate the buffer size.
+		UINT Size = Vertices.GetResourceDataSize();
+		if( Size > 0 )
+		{
+			// Create the buffer.
+			VertexBufferRHI = RHICreateVertexBuffer(Size,&Vertices,FALSE);
+		}
+	}
+	
+3. 模型的卸载
+	通过UObject的BeginDestroy，这个应该是被GC或者逻辑控制
+	/**
+	 * Called before destroying the object.  This is called immediately upon deciding to destroy the object, to allow the object to begin an
+	 * asynchronous cleanup process.
+	 */
+	virtual void BeginDestroy();

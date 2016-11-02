@@ -1,0 +1,83 @@
+UModelRender.cpp包含很多构建显示数据的函数
+
+
+流的设置
+void FVertexFactory::Set(FCommandContextRHI* Context) const
+{
+	// Set the predefined vertex streams.
+	for(UINT StreamIndex = 0;StreamIndex < Streams.Num();StreamIndex++)
+	{
+		RHISetStreamSource(Context,StreamIndex,Streams(StreamIndex).VertexBuffer->VertexBufferRHI,Streams(StreamIndex).Stride);
+	}
+}
+
+
+
+这是模型渲染代理
+class FModelSceneProxy : public FPrimitiveSceneProxy
+
+用于绘制编辑器中被标记过的模型, 不仅渲染模型本身,还要渲染一些线宽之类的RichMesh
+	virtual void DrawDecalElements(
+		FCommandContextRHI* Context, 
+		FPrimitiveDrawInterface* OpaquePDI, 
+		FPrimitiveDrawInterface* TranslucentPDI, 
+		const FSceneView* View, 
+		UINT DepthPriorityGroup, 
+		UBOOL bTranslucentReceiverPass
+		)
+
+用途不明		
+virtual void DrawDynamicElements(FPrimitiveDrawInterface* PDI,const FSceneView* View,UINT DepthPriorityGroup)
+
+
+用于绘制静态模型
+virtual void DrawStaticElements(FStaticPrimitiveDrawInterface* PDI)
+{
+			for(INT ElementIndex = 0;ElementIndex < Elements.Num();ElementIndex++)
+			{
+				const FModelElement& ModelElement = Component->GetElements()(ElementIndex);
+				if(ModelElement.NumTriangles > 0)
+				{
+					// 这里填充一个通用的结构体,用于本次渲染
+					FMeshElement MeshElement;
+					MeshElement.IndexBuffer = ModelElement.IndexBuffer;
+					MeshElement.VertexFactory = &Component->GetModel()->VertexFactory;
+					MeshElement.MaterialInstance = Elements(ElementIndex).GetMaterial()->GetInstanceInterface(FALSE);
+					MeshElement.LCI = &Elements(ElementIndex);
+					MeshElement.LocalToWorld = Component->LocalToWorld;
+					MeshElement.WorldToLocal = Component->WorldToLocal;
+					MeshElement.PreviousLocalToWorld = Component->PreviousLocalToWorld;
+					MeshElement.FirstIndex = ModelElement.FirstIndex;
+					MeshElement.NumPrimitives = ModelElement.NumTriangles;
+					MeshElement.MinVertexIndex = ModelElement.MinVertexIndex;
+					MeshElement.MaxVertexIndex = ModelElement.MaxVertexIndex;
+					MeshElement.Type = PT_TriangleList;
+					MeshElement.DepthPriorityGroup = PrimitiveDPG;
+					
+					//FStaticPrimitiveDrawInterface* PDI 是一个抽象的绘制接口,实现类在class FBatchingSPDI : public FStaticPrimitiveDrawInterface( SceneCore.cpp )
+					PDI->DrawMesh(MeshElement,0,WORLD_MAX);
+				}
+			}
+}
+
+从这个绘制实现可以看得出, 并不是直接绘制,而是将所有模型的子模型添加到Scene中,这样可以很好的处理一些透明问题
+class FBatchingSPDI : public FStaticPrimitiveDrawInterface
+		virtual void DrawMesh(
+			const FMeshElement& Mesh,
+			FLOAT MinDrawDistance,
+			FLOAT MaxDrawDistance
+			)
+		{
+			check(Mesh.NumPrimitives > 0);
+			FStaticMesh* StaticMesh = new(PrimitiveSceneInfo->StaticMeshes) FStaticMesh(
+				PrimitiveSceneInfo,
+				Mesh,
+				Square(MinDrawDistance),
+				Square(MaxDrawDistance),
+				CurrentHitProxy ? CurrentHitProxy->Id : FHitProxyId()
+				);
+		}
+		
+		
+最终绘制位置
+void FMeshDrawingPolicy::DrawMesh(FCommandContextRHI* Context,const FMeshElement& Mesh) const

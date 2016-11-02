@@ -1,0 +1,11 @@
+虚幻的异步加载不一定是在线程中处理的
+参考UnAsyncLoading.cpp
+
+异步处理的入口
+UObject::ProcessAsyncLoading( UBOOL bUseTimeLimit, FLOAT TimeLimit )
+
+这里会遍历所有需要加载的包进行处理,并且判断bExecuteNextStep是否可以继续执行
+
+虚幻的异步执行是分步骤进行的,每个步骤有超时控制
+
+所谓的Linker就是连接到压缩包的链接器, 并生成一个读写类进行处理

@@ -1,0 +1,21 @@
+
+struct MaterialParameters
+{
+	float2	TexCoords;
+	float3	VertexNormal;
+	float3	TangentNormal;
+	float3	TangentReflectionVector;
+	float3	TangentCameraVector;
+	float3	TangentLightVector;
+};
+
+
+float3 PointLightPhong(float3 InAmbientColor, float3 InDiffuseColor,float3 SpecularColor,float InSpecularPower, float3 L, float3 E, float3 N, float3 R)
+{
+   float3   DiffuseLighting = saturate(dot(N,L)),
+         SpecularLighting = pow(saturate(dot(R,E)),max(InSpecularPower,0.0001));
+
+   return InAmbientColor + InDiffuseColor * DiffuseLighting + SpecularLighting * SpecularColor;
+}
+
+

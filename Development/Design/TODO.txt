@@ -1,0 +1,29 @@
+彻底分离UI与逻辑, 去除输入设备.  外部Shift切换多选和单选
+考虑虚幻如何在游戏中使用输入设备
+核心层和UI层通过消息通知
+分离核心功能类,不集中使用一个类进行功能使用
+对全局通用Action进行统一管理
+将鼠标键盘事件分发到每个操作Tool上
+
+使用ActorController替代CameraController来控制摄像机
+摄像机与玩家都有几个共性: Position及看点
+控制器输入可以为Windows消息, 网络及脚本事件
+
+
+
+材质节点属性
+
+材质节点复制，批量移动
+
+单节点预览
+
+DemoLauncher改为GalaxyPlayer，挂接松鼠脚本，用脚本完成所有原有例子
+
+
+EditorObj的属性分组
+
+记忆属性是否展开
+
+移动缩放snap to grid
+
+Log添加线程,后台写

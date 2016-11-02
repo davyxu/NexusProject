@@ -1,0 +1,25 @@
+资源命名标准
+资源位置Content\[PackageName]
+有包时，为包名，散文件时为文件夹名
+
+一个资源的命名：  ResourceLocation = PackageName.GroupName.ResourceName  名称全引擎唯一
+
+初始Package设定
+EngineMaterial
+EngineMesh
+EngineAnimation
+EngineTexture
+
+
+PackageName由引擎配置文件做动态映射，可以放在磁盘的任意位置，甚至是网络
+
+GroupName为文件目录， 散文件就是文件夹，打包时，就是一个字符串名称路径
+
+ResourceName前缀
+S 静态模型
+SK 骨骼动画模型
+M 材质
+MI 材质实例
+
+
+

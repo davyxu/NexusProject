@@ -1,0 +1,17 @@
+
+
+RenderTargetableTexture2D----------------
+										| (Sort by priory)
+RenderTargetableSurface ------>RenderTargetableResource----------
+																|
+GameWindow   --------------------								|
+								|								|
+ExternWindow -------------->RenderWindow----------------> RenderTarget	<----Management----GameEngine
+																|
+					Camera--Aspect--RenderView---Management------
+										|
+					GameWorld--Source----
+					
+					
+1. GameWorld可以有多个,可以几个RenderView公用一个World也可以每个View一个World
+2. RenderTargetableResource 有一个优先度,这个值用于调节RTTexture和其他RT的渲染顺序

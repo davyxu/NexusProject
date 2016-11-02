@@ -1,0 +1,96 @@
+#include "Material.SF"
+
+// 外部访问变量定义
+sampler2D UniformTexture0; // BaseMap
+sampler2D UniformTexture1; // NormalMap
+
+
+// 自发光
+float3 GetMaterialEmissive( MaterialParameters Parameters )
+{
+	float3 Local1 = float3(0.0f,0.0f,0.0f);
+
+	return Local1;
+}
+
+// 漫反射
+float3 GetMaterialDiffuseColor(MaterialParameters Parameters)
+{
+	float2 Local2 = Parameters.TexCoords;
+	float4 Local3 = tex2D( UniformTexture0, Local2 );
+
+	return Local3.rgb;
+}
+
+// 法线
+float3 GetMaterialNormal(MaterialParameters Parameters)
+{
+	float2 Local4 = Parameters.TexCoords;
+	float4 Local5 = tex2D( UniformTexture1, Local4 );
+	float  Local7 = 2.000000;
+	float3 Local8 = Local5.rgb * Local7;
+	float  Local6 = 1.000000;
+	float3 Local9 = Local8 - Local6;
+	float3 Local10 = normalize( Local9 );
+
+	return Local10;
+}
+
+// 高光
+float3 GetMaterialSpecularColor(MaterialParameters Parameters)
+{
+ 	float4 Local11 = float4( 1.000000, 1.000000, 1.000000, 1.000000 );
+
+	return Local11.rgb;
+}
+
+float GetMaterialSpecularPower(MaterialParameters Parameters)
+{
+ 	float  Local12 = 16.0f;
+
+	return Local12;
+}
+
+// 不透明度
+float GetMaterialOpacity( MaterialParameters Parameters )
+{
+ 	float  Local13 = 1.0f;
+
+	return Local13;
+}
+
+
+float3 GetMaterialPointLightTransfer( MaterialParameters Parameters )
+{
+      return PointLightPhong(
+      GetMaterialEmissive(Parameters),
+      GetMaterialDiffuseColor(Parameters),
+      GetMaterialSpecularColor(Parameters),
+      GetMaterialSpecularPower(Parameters),
+      Parameters.TangentLightVector,
+      Parameters.TangentCameraVector,
+      Parameters.TangentNormal,
+      Parameters.TangentReflectionVector
+      );
+}
+
+
+float4 Main(       
+      float2 TexCoord : TEXCOORD0,
+      float3 Eye      : TEXCOORD5,
+      float3 Light    : TEXCOORD6,
+      float3 Normal   : TEXCOORD7 
+      ) : COLOR0
+{
+   MaterialParameters Parameters;
+   Parameters.TexCoords = TexCoord;
+   Parameters.TangentLightVector = normalize(Light);
+   Parameters.TangentCameraVector = normalize(Eye);
+   Parameters.VertexNormal = Normal;
+   Parameters.TangentNormal = GetMaterialNormal( Parameters );
+   Parameters.TangentReflectionVector = normalize(reflect(-Parameters.TangentLightVector, Parameters.TangentNormal));
+   
+
+   return float4( GetMaterialPointLightTransfer( Parameters ),	GetMaterialOpacity( Parameters ) );
+}
+

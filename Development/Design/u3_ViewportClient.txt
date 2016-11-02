@@ -1,0 +1,102 @@
+
+
+层次关系
+
+class FViewport : public FRenderTarget, private FRenderResource
+
+
+
+FViewportClient	
+	void Draw(FViewport* Viewport,FCanvas* Canvas)
+	void InputKey(FViewport* Viewport,FName Key, EInputEvent Event,FLOAT AmountDepressed = 1.f)
+	void MouseMove(FViewport* Viewport,INT X,INT Y)
+	
+	// 游戏逻辑执行主体,每个UGameViewportClient对应1个FViewportFrame
+	class UGameViewportClient : public UObject, public FViewportClient, public FExec
+	
+	
+	
+FViewportFrame
+	FViewport* GetViewport();
+	void Resize(UINT NewSizeX,UINT NewSizeY,UBOOL NewFullscreen,INT InPosX = -1, INT InPosY = -1);
+	
+	
+	// Windows下的基本窗口数据封装及实现,概念上等同于独立的Viewport区域或者是编辑器中的一个查看窗口
+	class FWindowsViewport : public FViewportFrame, public FViewport
+		virtual void* GetWindow() { return Window; }
+		virtual INT GetMouseX();
+		virtual INT GetMouseY();
+		virtual void GetMousePos( FIntPoint& MousePosition );
+		
+		HWND					Window,
+								ParentWindow;
+		UBOOL					Minimized;
+		UBOOL					Maximized;
+	
+	
+	
+class UClient : public UObject, FExec
+
+	// Windows客户端核心,概念上等同于MainForm
+	class UWindowsClient : public UClient
+	
+		static TArray<FWindowsViewport*>	Viewports;
+		static LPDIRECTINPUT8				DirectInput8;
+		
+		UEngine*							Engine;
+		UAudioDevice*						AudioDevice;
+		static LONG APIENTRY StaticWndProc( HWND hWnd, UINT Message, UINT wParam, LONG lParam );
+	
+		FViewportFrame* UWindowsClient::CreateViewportFrame(FViewportClient* ViewportClient,const TCHAR* Name,UINT SizeX,UINT SizeY,UBOOL Fullscreen)
+		FViewport* UWindowsClient::CreateWindowChildViewport(FViewportClient* ViewportClient,void* ParentWindow,UINT SizeX,UINT SizeY,INT InPosX,INT InPosY)
+	
+	
+4. 创建流程
+	
+	UnGame.cpp
+	UGameViewportClient 的创建
+	
+	UGameViewportClient* ViewportClient = NULL;
+	if(Client)
+	{
+		ViewportClient = ConstructObject<UGameViewportClient>(GameViewportClientClass,this);
+		GameViewport = ViewportClient;
+
+		FString Error;
+		if(!ViewportClient->eventInit(Error))
+		{
+			appErrorf(TEXT("%s"),*Error);
+		}
+	}
+	
+	
+	
+	// 将viewport client 连接到 viewport.
+	if(ViewportClient)
+	{
+		Parse(appCmdLine(), TEXT("ResX="), Client->StartupResolutionX);
+		Parse(appCmdLine(), TEXT("ResY="), Client->StartupResolutionY);
+
+		FViewportFrame* ViewportFrame = Client->CreateViewportFrame(
+			ViewportClient,
+			*LocalizeGeneral("Product",GPackage),
+			Client->StartupResolutionX,
+			Client->StartupResolutionY,
+			Client->StartupFullscreen && !ParseParam(appCmdLine(),TEXT("WINDOWED"))
+			);
+
+		GameViewport->SetViewport(ViewportFrame);
+	}
+	
+5. 清除
+	FViewport::UpdateViewportRHI()
+	{
+		if(bDestroyed)
+		{
+			if(IsValidRef(ViewportRHI))
+			{
+				// If the viewport RHI has already been initialized, release it.	RHI层将其从全局列表中清除
+				ViewportRHI.Release();	
+			}
+	
+	}

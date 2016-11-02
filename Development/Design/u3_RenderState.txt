@@ -1,0 +1,104 @@
+RHIStaticStates.h
+
+
+
+用例分析：
+RHISetBlendState(GlobalContext,TStaticBlendState<BO_Add,BF_One,BF_One,BO_Add,BF_One,BF_One>::GetRHI());
+
+GlobalContext在此版本中未保留设置，
+
+TStaticBlendState模板中的默认参数就是BlendState的默认参数
+
+TStaticBlendState<BO_Add,BF_One,BF_One,BO_Add,BF_One,BF_One>::GetRHI()
+
+可以看出，这里使用一个静态状态对象，通过修改参数
+static RHIRefType GetRHI()
+{
+	static FStaticStateResource Resource;
+	return Resource.StateRHI;
+};
+
+
+初始化过程：
+	class FStaticStateResource : public FRenderResource
+	{
+	public:
+
+		RHIRefType StateRHI;
+
+		FStaticStateResource()
+		{
+			Init();		// 构造时调用FRenderResource.Init
+		}
+		
+	}
+	
+	
+	
+基类的初始化	
+void FRenderResource::Init()
+{
+	// 只初始化一次
+	if(!bInitialized)
+	{
+		// 连接到FRenderResource的链表中进行管理
+		ResourceLink = TLinkedList<FRenderResource*>(this);
+		ResourceLink.Link(GetResourceList());
+		
+		// 如果渲染层准备好时，初始化
+		if(GIsRHIInitialized)
+		{
+			InitDynamicRHI();
+			InitRHI();
+		}
+		bInitialized = TRUE;
+	}
+}
+
+
+接着调用
+	virtual void FStaticStateResource::InitRHI()
+	{
+		StateRHI = InitializerType::CreateRHI();
+	}
+	
+分别调用每个State的创建函数
+	static FBlendStateRHIRef CreateRHI()
+	{
+		FBlendStateInitializerRHI Initializer =
+		{
+			ColorBlendOp,
+			ColorSrcBlend,
+			ColorDestBlend,
+			AlphaBlendOp,
+			AlphaSrcBlend,
+			AlphaDestBlend,
+			AlphaTest,
+			AlphaRef
+		};
+		return RHICreateBlendState(Initializer);
+	}
+	
+剩下的就是一些底层的函数
+FBlendStateRHIRef RHICreateBlendState(const FBlendStateInitializerRHI& Initializer)
+{
+	FD3DBlendState* BlendState = new FD3DBlendState;
+	BlendState->bAlphaBlendEnable = Initializer.ColorDestBlendFactor != BF_Zero || Initializer.ColorSourceBlendFactor != BF_One;
+	BlendState->ColorBlendOperation = TranslateBlendOp(Initializer.ColorBlendOperation);
+	BlendState->ColorSourceBlendFactor = TranslateBlendFactor(Initializer.ColorSourceBlendFactor);
+	BlendState->ColorDestBlendFactor = TranslateBlendFactor(Initializer.ColorDestBlendFactor);
+	BlendState->bSeparateAlphaBlendEnable = Initializer.AlphaDestBlendFactor != BF_Zero || Initializer.AlphaSourceBlendFactor != BF_One;
+	BlendState->AlphaBlendOperation = TranslateBlendOp(Initializer.AlphaBlendOperation);
+	BlendState->AlphaSourceBlendFactor = TranslateBlendFactor(Initializer.AlphaSourceBlendFactor);
+	BlendState->AlphaDestBlendFactor = TranslateBlendFactor(Initializer.AlphaDestBlendFactor);
+	BlendState->bAlphaTestEnable = Initializer.AlphaTest != CF_Always;
+	BlendState->AlphaFunc = TranslateCompareFunction(Initializer.AlphaTest);
+	BlendState->AlphaRef = Initializer.AlphaRef;
+	return BlendState;
+}
+
+
+点评：虚幻利用了模板构造状态类，通过不同参数构造出不同的状态类，而相同参数又使用同一状态类，很高明
+RHISetDepthState(GlobalContext,TStaticDepthState<FALSE,CF_LessEqual>::GetRHI());
+
+RHISetDepthState(GlobalContext,TStaticDepthState<FALSE,CF_LessEqual>::GetRHI());

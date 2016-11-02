@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C84DC954-D20D-48A2-B88F-521F522AF8C5}</ProjectGuid>
+    <RootNamespace>Core</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\Lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\Obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\Lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\Obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>CorePCH.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)nk$(ProjectName)_d.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;CORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>CorePCH.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)nk$(ProjectName).lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CoreInitializer.cpp" />
+    <ClCompile Include="CorePCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="FRect.cpp" />
+    <ClCompile Include="Intersection.cpp" />
+    <ClCompile Include="MathLib.cpp" />
+    <ClCompile Include="Matrix3.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector4.cpp" />
+    <ClCompile Include="Viewport.cpp" />
+    <ClCompile Include="DataConv.cpp" />
+    <ClCompile Include="DataConvA.cpp" />
+    <ClCompile Include="NameTable.cpp" />
+    <ClCompile Include="Persistence.cpp" />
+    <ClCompile Include="Property3.cpp" />
+    <ClCompile Include="PropertySerializer.cpp" />
+    <ClCompile Include="RTTIObject.cpp" />
+    <ClCompile Include="PackFile.cpp" />
+    <ClCompile Include="PackSource.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Clipboard.cpp" />
+    <ClCompile Include="CmdLineParser.cpp" />
+    <ClCompile Include="Directory.cpp" />
+    <ClCompile Include="DynamicLib.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="FileFinder.cpp" />
+    <ClCompile Include="KernelObject.cpp" />
+    <ClCompile Include="Lock.cpp" />
+    <ClCompile Include="SyncObject.cpp" />
+    <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="TimeSource.cpp" />
+    <ClCompile Include="WinControl.cpp" />
+    <ClCompile Include="WinDesktop.cpp" />
+    <ClCompile Include="WinFileDialog.cpp" />
+    <ClCompile Include="WinForm.cpp" />
+    <ClCompile Include="CheckSum.cpp" />
+    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="Diagnose.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="StringConv.cpp" />
+    <ClCompile Include="StringHelper.cpp" />
+    <ClCompile Include="StringHelperA.cpp" />
+    <ClCompile Include="DataStream.cpp" />
+    <ClCompile Include="DotFile.cpp" />
+    <ClCompile Include="FileStream.cpp" />
+    <ClCompile Include="HeapStream.cpp" />
+    <ClCompile Include="IniFile.cpp" />
+    <ClCompile Include="ProxyStream.cpp" />
+    <ClCompile Include="RefStream.cpp" />
+    <ClCompile Include="StackStream.cpp" />
+    <ClCompile Include="TextFile.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Include\Core\CoreInitializer.h" />
+    <ClInclude Include="CorePCH.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Math.h" />
+    <ClInclude Include="..\..\Include\Core\Camera.h" />
+    <ClInclude Include="..\..\Include\Core\Color.h" />
+    <ClInclude Include="..\..\Include\Core\FRect.h" />
+    <ClInclude Include="..\..\Include\Core\Intersection.h" />
+    <ClInclude Include="..\..\Include\Core\MathLib.h" />
+    <ClInclude Include="..\..\Include\Core\Matrix3.h" />
+    <ClInclude Include="..\..\Include\Core\Matrix4.h" />
+    <ClInclude Include="..\..\Include\Core\Point.h" />
+    <ClInclude Include="..\..\Include\Core\Quaternion.h" />
+    <ClInclude Include="..\..\Include\Core\Rect.h" />
+    <ClInclude Include="..\..\Include\Core\Rotator.h" />
+    <ClInclude Include="..\..\Include\Core\Shape.h" />
+    <ClInclude Include="..\..\Include\Core\Vector2.h" />
+    <ClInclude Include="..\..\Include\Core\Vector3.h" />
+    <ClInclude Include="..\..\Include\Core\Vector4.h" />
+    <ClInclude Include="..\..\Include\Core\Viewport.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Reflection.h" />
+    <ClInclude Include="..\..\Include\Core\DataConv.h" />
+    <ClInclude Include="..\..\Include\Core\DataConvA.h" />
+    <ClInclude Include="..\..\Include\Core\Delegate2.h" />
+    <ClInclude Include="..\..\Include\Core\EnumObject.h" />
+    <ClInclude Include="..\..\Include\Core\NameTable.h" />
+    <ClInclude Include="..\..\Include\Core\Persistence.h" />
+    <ClInclude Include="..\..\Include\Core\Property3.h" />
+    <ClInclude Include="..\..\Include\Core\PropertySerializer.h" />
+    <ClInclude Include="..\..\Include\Core\RTTIObject.h" />
+    <ClInclude Include="..\..\Include\Core\SettingObject.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Pack.h" />
+    <ClInclude Include="..\..\Include\Core\PackFile.h" />
+    <ClInclude Include="..\..\Include\Core\PackSource.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Platform.h" />
+    <ClInclude Include="..\..\Include\Core\Application.h" />
+    <ClInclude Include="..\..\Include\Core\Clipboard.h" />
+    <ClInclude Include="..\..\Include\Core\CmdLineParser.h" />
+    <ClInclude Include="..\..\Include\Core\Directory.h" />
+    <ClInclude Include="..\..\Include\Core\DynamicLib.h" />
+    <ClInclude Include="..\..\Include\Core\File.h" />
+    <ClInclude Include="..\..\Include\Core\FileFinder.h" />
+    <ClInclude Include="..\..\Include\Core\KernelObject.h" />
+    <ClInclude Include="..\..\Include\Core\Lock.h" />
+    <ClInclude Include="..\..\Include\Core\SyncObject.h" />
+    <ClInclude Include="..\..\Include\Core\Thread.h" />
+    <ClInclude Include="..\..\Include\Core\TimeSource.h" />
+    <ClInclude Include="..\..\Include\Core\WinControl.h" />
+    <ClInclude Include="..\..\Include\Core\WinDesktop.h" />
+    <ClInclude Include="..\..\Include\Core\WinFileDialog.h" />
+    <ClInclude Include="..\..\Include\Core\WinForm.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Basic.h" />
+    <ClInclude Include="..\..\Include\Core\CheckSum.h" />
+    <ClInclude Include="..\..\Include\Core\Console.h" />
+    <ClInclude Include="..\..\Include\Core\Diagnose.h" />
+    <ClInclude Include="..\..\Include\Core\DynamicHash.h" />
+    <ClInclude Include="..\..\Include\Core\EngineType.h" />
+    <ClInclude Include="..\..\Include\Core\GrowableBuffer.h" />
+    <ClInclude Include="..\..\Include\Core\Link.h" />
+    <ClInclude Include="..\..\Include\Core\LinkedList.h" />
+    <ClInclude Include="..\..\Include\Core\Log.h" />
+    <ClInclude Include="..\..\Include\Core\Path.h" />
+    <ClInclude Include="..\..\Include\Core\Pool.h" />
+    <ClInclude Include="..\..\Include\Core\RefCounting.h" />
+    <ClInclude Include="..\..\Include\Core\RingBuffer.h" />
+    <ClInclude Include="..\..\Include\Core\StaticHash.h" />
+    <ClInclude Include="..\..\Include\Core\StringConv.h" />
+    <ClInclude Include="..\..\Include\Core\StringHelper.h" />
+    <ClInclude Include="..\..\Include\Core\StringHelperA.h" />
+    <ClInclude Include="..\..\Include\NekoCore_Stream.h" />
+    <ClInclude Include="..\..\Include\Core\DataStream.h" />
+    <ClInclude Include="..\..\Include\Core\DotFile.h" />
+    <ClInclude Include="..\..\Include\Core\FileStream.h" />
+    <ClInclude Include="..\..\Include\Core\HeapStream.h" />
+    <ClInclude Include="..\..\Include\Core\IniFile.h" />
+    <ClInclude Include="..\..\Include\Core\ProxyStream.h" />
+    <ClInclude Include="..\..\Include\Core\RefStream.h" />
+    <ClInclude Include="..\..\Include\Core\StackStream.h" />
+    <ClInclude Include="..\..\Include\Core\TextFile.h" />
+    <ClInclude Include="..\..\Include\NekoCore.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

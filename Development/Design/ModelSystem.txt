@@ -1,0 +1,7 @@
+
+静态模型的存储结构
+
+Region用于渲染物体
+	LODBucket
+		MaterialBucket
+			GeometryBucket

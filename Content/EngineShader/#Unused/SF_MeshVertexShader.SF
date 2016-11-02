@@ -1,0 +1,16 @@
+
+float4x4 Transform;
+
+void Main(
+	in float4 InPosition : POSITION,
+	in float2 InTexCoord : TEXCOORD0,
+	in float3 InNormal : NORMAL,
+	out float4 OutPosition : POSITION,
+	out float2 OutTexCoord : TEXCOORD0
+	//out float4 OutNormal : COLOR0
+	)
+{
+	OutPosition = mul(InPosition, Transform );
+	OutTexCoord = InTexCoord;
+	//OutNormal = float4( InNormal.xyz, 1.0f);
+}

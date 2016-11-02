@@ -1,0 +1,90 @@
+FRenderResource
+
+1. 资源初始化
+发生在第一次创建设备和设备重置后
+参见：D3DDevice.cpp UpdateD3DDeviceFromViewports() 
+
+for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+{
+    ResourceIt->InitDynamicRHI();
+}
+for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+{
+     ResourceIt->InitRHI();
+}
+
+2. 资源卸载
+void CleanupD3DDevice()
+{
+	check( IsInGameThread() );
+	if(GIsRHIInitialized)
+	{
+		// Ask all initialized FRenderResources to release their RHI resources.
+		for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+		{
+			ResourceIt->ReleaseRHI();
+		}
+		for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+		{
+			ResourceIt->ReleaseDynamicRHI();
+		}
+		GIsRHIInitialized = FALSE;
+	}
+}
+
+3. 初始化后，且硬件准备好时，开始更新
+void FRenderResource::UpdateRHI()
+{
+	if(bInitialized && GIsRHIInitialized)
+	{
+		ReleaseRHI();
+		ReleaseDynamicRHI();
+		InitDynamicRHI();
+		InitRHI();
+	}
+}
+
+
+渲染线程命令入口
+void BeginInitResource(FRenderResource* Resource)
+{
+	ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+		InitCommand,
+		FRenderResource*,Resource,Resource,
+		{
+			Resource->Init();
+		});
+}
+
+void BeginUpdateResourceRHI(FRenderResource* Resource)
+{
+	ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+		UpdateCommand,
+		FRenderResource*,Resource,Resource,
+		{
+			Resource->UpdateRHI();
+		});
+}
+
+void BeginReleaseResource(FRenderResource* Resource)
+{
+	ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+		ReleaseCommand,
+		FRenderResource*,Resource,Resource,
+		{
+			Resource->Release();
+		});
+}
+
+void ReleaseResourceAndFlush(FRenderResource* Resource)
+{
+	// Send the release message.
+	ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+		ReleaseCommand,
+		FRenderResource*,Resource,Resource,
+		{
+			Resource->Release();
+		});
+
+	FlushRenderingCommands();
+}

@@ -1,0 +1,7 @@
+
+float4 FillColor;
+
+void Main( out float4 OutColor : COLOR0 )
+{
+	OutColor = FillColor;	
+}

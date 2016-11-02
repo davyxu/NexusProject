@@ -1,0 +1,109 @@
+文件结构
+
+private:
+\Material\*.mat  节点材质文件
+
+
+public:
+\MaterialShader\*.usf 由节点生成的shader文件
+
+\Model\*.msh *.skl *.san *.dds *.mti  模型，骨骼，动画，纹理，材质实例
+
+\Shader\*.usf Shader模板及固定Shader
+
+
+ShaderBinder分两种使用方法
+
+ShaderMaster管理的为固定Shader，以ClassInfo为索引，手动注册, 管理器统一编译，缓冲
+
+ResourceManager管理的为MaterialShader， 以字符串为索引，Get时，自动从磁盘读取
+
+ShaderBinder序列化需要保存的数据：
+1. RTTI ClassInfo
+2. Shader Meta Info， 绑定的Shader文件，入口，profile等
+3. 名称， 固定shader为类名， 材质shader为 其自己名称
+4. ShaderParameter
+5. 其他用户信息
+
+
+固定Shader的载入过程及匹配
+1. 读取固定Shader Cache 包
+2. 读取一个对象，用其ClassInfo在已经注册好的ShaderMaster固定Shader类型中取出存储空间，将自己连接上
+这样就能将类型与实例做出一个single联结
+
+
+编辑器功能：
+1. 导入查看模型，骨骼动画
+2. 创建节点材质
+3. 将模型材质实例文件与具体材质结合
+4. 编译节点材质文件为shader文件
+
+
+引擎客户端功能：
+1. 第一次启动时，编译Shader，并缓冲
+
+
+
+Material的生成及概念
+1. 编辑器只做生成节点，序列化为Material类型
+文件结构
+  Parameter			控制MaterialVertexShader的编译宏参数，例如TangentSpace， DoubleLighting
+  DesignNodeList	编辑器相关数据，只在设计时读取
+  
+2. MaterialVertexShader的实现可以有很多种类型，例如MaterailTerrainVertexShader, MaterialParticleVertexShader等等
+要套用Material系统效果，只需要将一些参数输出给PS即可，同时利用Material编辑时输出的宏参数进行编译
+
+Material的绑定及使用
+1. 1个模型的MaterialInstance包含有 要用到的纹理列表，材质列表及 一系列使用配置
+2. 纹理及Material在MaterialInstance加载完毕后，进入缓冲
+3. 此时，需要由MaterialInstance动态绑定MaterialInstance对应的VertexShader使用者， 
+	例如NeModel告诉MaterialInstance使用ModelMaterialVertexShader
+4. 使用Material的名称向ShaderMaster请求对应的VS及PS， 命名原则为
+	MaterialName + "_PS.usf" / MaterialName + "_VS.usf"
+	使用 GShaderMaster.GetMaterialShader( MaterialName, VertexShaderType, out MaterialVertexShader, out MaterialPixelShader );
+5. ShaderMaster此时先检查缓冲，已经存在的缓冲就加载进来
+6. 如果没有缓冲，将开始编译
+
+MaterialPixelShader的生成流程为
+Material节点设计， 生成MaterialPixelShader
+
+MaterialVertexShader的生成流程为
+具体的VertexShader提供者提供Shader文件，根据不同的配置项进行编译
+配置的不同，会导致编译出的MaterialVertexShader多种多样
+因此，采用配置做key，来获取合适的MaterialVertexShader比较合适
+
+
+
+
+第三版设计：
+1. MaterialName不是ResourceLocation
+2. MaterialName全局唯一不可重复
+3. 确定MaterialVertexShader： 由RTTIClassInfo的Metainfo提供Shader资源路径，例如：EngineShader.SF_ModelMaterialVertexShader
+   使用RTTIClassInfo提供的类创建Binder，由MaterialInstance提供编译参数，进行材质Shader编译
+   
+4. 确定MaterialPixelShader： EngineMaterial.SF_ + MaterialName 确定PS资源路径，创建MaterialPixelShader实例
+   由MaterialInstance提供编译参数，进行材质Shader编译
+
+
+Actor为容器，提供组件管理功能
+
+ActorComponent 为组件模型
+
+TransformComponent 提供矩阵变换控制
+SoundComponent
+StaticMeshComponent
+SkeletonMeshComponent
+ShadowComponent
+
+
+场景管理：
+主渲染流程
+GameEngine.Tick -> GameEngine.Draw
+-> ProcessRT -> DrawViewport ---Camera-->SceneManagement
+UpdateSceneGraph( Node, Matrix, BoundingBox )
+SceneManager.ClearRenderQueue
+SceneManager.FindVisibleObject
+
+关系:
+RenderTarget --1~n--> RenderView --1~1--> Camera
+

@@ -1,0 +1,13 @@
+-no_thread_rendering
+-no_grid
+-no_thread_loading
+-no_shadercache
+-initscene
+
+F1 toggle update
+F6 toggle grid
+F7 recompile shader 
+F8 thread rendeing 
+F9 set debugging camera position
+
+

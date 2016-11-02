@@ -1,0 +1,32 @@
+
+// SM 2.0 max 256 constant
+// Old Methed  1 bone = 4 constant   total pure 64 bones , safe 50 bones
+// New Methed  1 bone = 2 constant   total pure 128 bones , safe 100 bones
+
+float4x4 BoneLocalTransform[50];
+
+
+float4x4 WorldViewProjectionTransform;
+
+void Main(
+	in float4 InPosition 	: POSITION,
+	in float2 InTexCoord 	: TEXCOORD0,
+	in float4 BoneWeights	: BLENDWEIGHT0,
+    in float4 BoneIndices	: BLENDINDICES0,
+	out float4 OutPosition : POSITION,
+	out float2 OutTexCoord : TEXCOORD0
+	)
+{
+	float4x4 SkinTransform = 0;
+
+	SkinTransform += BoneLocalTransform[BoneIndices.x] * BoneWeights.x;
+	SkinTransform += BoneLocalTransform[BoneIndices.y] * BoneWeights.y;
+	SkinTransform += BoneLocalTransform[BoneIndices.z] * BoneWeights.z;
+	SkinTransform += BoneLocalTransform[BoneIndices.w] * BoneWeights.w;
+	float4 LocalPos = mul(InPosition, SkinTransform);
+	
+	
+
+	OutPosition = mul(LocalPos, WorldViewProjectionTransform );
+	OutTexCoord = InTexCoord;
+}

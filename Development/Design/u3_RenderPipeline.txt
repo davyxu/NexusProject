@@ -1,0 +1,213 @@
+D3DDevice.cpp
+
+1. 设备的创建及更新，游戏线程调用
+void UpdateD3DDeviceFromViewports()
+{
+	// 如果有viewport存在即开始渲染处理
+	if(GD3DViewports.Num())
+	{
+		// 创建D3D
+		*GDirect3D.GetInitReference() = Direct3DCreate9(D3D_SDK_VERSION);
+		
+		// 全屏viewport找到合适的尺寸
+		
+		// 检查是否需要重新创建设备（窗口）
+		
+		// 填充D3DPRESENT_PARAMETERS 结构
+		// 释放backbuffer surface
+		
+		if(GDirect3DDevice)
+		{
+			// 重置设备
+			Result=GDirect3DDevice->Reset(&PresentParameters)
+		}
+		else
+		{
+			// 检查顶点格式
+			// 获取Caps
+			
+			// 创建设备
+			Result = GDirect3D->CreateDevice(
+						AdapterNumber == INDEX_NONE ? D3DADAPTER_DEFAULT : AdapterNumber,
+						DeviceType,
+						NewDeviceWindow,
+						CreationFlags,
+						&PresentParameters,
+						GDirect3DDevice.GetInitReference()
+						);
+						
+			// 初始化backbuffer surface
+			
+			
+			// 初始化静态资源及动态资源
+			for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+			{
+				ResourceIt->InitDynamicRHI();
+			}
+			for(TLinkedList<FRenderResource*>::TIterator ResourceIt(FRenderResource::GetResourceList());ResourceIt;ResourceIt.Next())
+			{
+				ResourceIt->InitRHI();
+			}
+		}
+		
+	}
+	else
+	{
+		// 卸载设备，停止渲染
+	}
+	
+}
+
+
+2. 触发更新Viewport
+FD3DViewport::FD3DViewport(void* InWindowHandle,UINT InSizeX,UINT InSizeY,UBOOL bInIsFullscreen):
+	WindowHandle(InWindowHandle),
+	SizeX(InSizeX),
+	SizeY(InSizeY),
+	bIsFullscreen(bInIsFullscreen)
+{
+	GD3DViewports.AddItem(this);
+	UpdateD3DDeviceFromViewports();
+}
+
+创建Viewport
+FViewportRHIRef RHICreateViewport(void* WindowHandle,UINT SizeX,UINT SizeY,UBOOL bIsFullscreen)
+{
+	check( IsInGameThread() );
+	return new FD3DViewport(WindowHandle,SizeX,SizeY,bIsFullscreen);
+}
+
+
+更新ViewportRHI
+void FViewport::UpdateViewportRHI(UBOOL bDestroyed,UINT NewSizeX,UINT NewSizeY,UBOOL bNewIsFullscreen)
+{
+		if(IsValidRef(ViewportRHI))
+		{
+			// If the viewport RHI has already been initialized, resize it.
+			RHIResizeViewport(
+				ViewportRHI,
+				SizeX,
+				SizeY,
+				bIsFullscreen
+				);
+		}
+		else
+		{
+			// Initialize the viewport RHI with the new viewport state.
+			ViewportRHI = RHICreateViewport(
+				GetWindow(),
+				SizeX,
+				SizeY,
+				bIsFullscreen
+				);
+		}
+	
+}
+
+
+
+
+2. 绘制流程
+
+	//FViewport 既是FRenderTarget,又是FRenderResource,派生类为 FWindowsViewport
+	// FWindowsViewport 位于WinDrv
+	FViewport::Draw()
+	{
+		if ( 在游戏中,切游戏渲染关闭 )
+		{
+			// 计算每个玩家的可视区域
+			CalcSceneView( )
+			{
+				//如果玩家有摄像机,使用本身摄像机,否则使用viewport摄像机
+				// 将玩家Viewinfo添加
+				GStreamingManager->AddViewInformation( View->ViewOrigin, View->SizeX, View->SizeX * View->ProjectionMatrix.M[0][0] );
+				// GStreamingManager的功能大概是一个在runtime后台通过LOD层级自动加载及更新纹理的管理器
+			}
+			
+			
+			// UnWorld.Cpp
+			// 根据当前view的信息及玩家的LOD层级更新世界
+			// 决定哪些部件该加载与卸载
+			GWorld->UpdateLevelStreaming( &ViewFamily );	
+			{
+				// 虚幻中异步加载的例子
+				UObject::LoadPackageAsync( *StreamingLevel->PackageName.ToString(), AsyncLevelLoadCompletionCallback, NULL );
+			}
+			
+	
+		}
+		else// 绘制游戏及编辑器
+		{
+			RHIBeginDrawingViewport
+			{
+				BeginScene
+				SetRenderTarget( BackBuffer )
+			}
+			
+			
+			// 这里将FViewport作为FRenderTarget传入,FRenderTarget直接封装了D3D的surface
+			// FCanvas为平面绘制对象
+			FCanvas Canvas(this,NULL);
+			{
+				// FViewportClient* ViewportClient 为抽象类,派生类可以主要有2个
+				// UGameViewportClient及FEditorLevelViewportClient
+				ViewportClient->Draw(this,&Canvas);
+				
+				// 参看UnPlayer.cpp
+				void UGameViewportClient::Draw(FViewport* Viewport,FCanvas* Canvas)
+				{
+					// 绘制场景
+					// 绘制UI
+				}
+			}
+			Canvas.Flush();
+			
+			RHIEndDrawingViewport
+			{
+				EndScene
+				根据是否全屏Present
+			}
+		}
+	}
+
+	
+
+搜索public FPrimitiveDrawInterface
+
+ULineBatchComponent 用于绘制线，其他DrawMesh接口都没有实现
+
+
+
+UPrimitiveComponent.Render 渲染的入口
+
+
+
+
+
+在void UPrimitiveComponent::Attach() 时
+	if( (!GIsGame && !HiddenEditor) || (GIsGame && !HiddenGame))
+	{
+		Scene->AddPrimitive(this);
+	}
+	
+	这个UPrimitiveComponent被添加到场景
+	
+
+为场景创建一个渲染代理
+void FScene::AddPrimitive(UPrimitiveComponent* Primitive)
+{
+	UPrimitiveComponent* Primitive；
+	Primitive->CreateSceneProxy();
+
+	通过线程调用，将SceneInfo放入渲染队列
+	AddPrimitiveSceneInfo_RenderThread	
+	这里将静态模型合并为一个巨大模型
+	
+	
+}
+
+
+
+模型的细节渲染在FSkeletalMeshSceneProxy::DrawDynamicElements中完成
+
+

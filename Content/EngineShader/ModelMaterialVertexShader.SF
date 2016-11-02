@@ -1,0 +1,104 @@
+float4x4 WorldViewProjectionTransform;
+float4x4 WorldTransform;
+float4 ViewPosition;
+float4 LightPosition;
+
+float4x4 BoneLocalTransform[50];
+
+#define MAX_BONE_INFLUENCES 4
+
+#define MATERIAL_TEXCOORD_NUMBER 1
+ // #define TANGENT_SPACE  // Local Space Or Tangent Space
+ //#define USE_SKIN
+
+struct VertexFactoryInput 
+{
+      float4 Position 		: POSITION;
+	  float3 Tangent  		: TANGENT;  // TangentX
+	  float3 Binormal 		: BINORMAL; // TangentY
+      float3 Normal   		: NORMAL;	// TangentZ
+      
+	  float4 BoneWeights	: BLENDWEIGHT;
+	  float4 BoneIndices	: BLENDINDICES;
+	  
+#if MATERIAL_TEXCOORD_NUMBER
+	  float2 TexCoord[MATERIAL_TEXCOORD_NUMBER] : TEXCOORD0;
+#endif
+
+};
+
+struct VertexFactoryInterpolants 
+{
+      float4 Position : POSITION;
+	  
+#if MATERIAL_TEXCOORD_NUMBER
+      float2 TexCoord[MATERIAL_TEXCOORD_NUMBER] : TEXCOORD0;
+ #endif
+	  
+      float3 Eye      : TEXCOORD5;
+      float3 Light    : TEXCOORD6;
+      float3 Normal   : TEXCOORD7;
+};
+
+
+float4x4 GetSkinTransform( VertexFactoryInput Input )
+{
+	float4x4 SkinTransform = 0;
+	
+	for( int i=0; i < MAX_BONE_INFLUENCES; i++ )
+	{
+		SkinTransform += BoneLocalTransform[Input.BoneIndices[i] ] * Input.BoneWeights[i];
+	}
+	
+	
+	return SkinTransform;
+}
+
+void Main( 
+	VertexFactoryInput Input,
+	out VertexFactoryInterpolants OutFactoryInterpolants
+ )
+{
+
+	
+// 蒙皮处理
+	float4 LocalPosition;
+#ifdef USE_SKIN
+	LocalPosition = mul( Input.Position, GetSkinTransform(Input) );
+#else
+	LocalPosition = Input.Position;
+#endif
+	
+	float4 WorldPosition = mul (LocalPosition, WorldTransform);
+	float4 EyeVector = ViewPosition - WorldPosition;   //视线
+	
+	for( int CoordIndex = 0; CoordIndex < MATERIAL_TEXCOORD_NUMBER; CoordIndex++ )
+	{
+		OutFactoryInterpolants.TexCoord[CoordIndex] = Input.TexCoord[CoordIndex];
+	}
+	
+#ifdef TANGENT_SPACE
+	 //将光线和视线变换到正切空间，world矩阵为单位阵所以不用先变换法线
+	 OutFactoryInterpolants.Eye.x = dot(Input.Tangent, EyeVector);
+	 OutFactoryInterpolants.Eye.y = dot(Input.Binormal, EyeVector);
+	 OutFactoryInterpolants.Eye.z = dot(Input.Normal, EyeVector);
+	 
+	 OutFactoryInterpolants.Light.x = dot(Input.Tangent, LightPosition);
+	 OutFactoryInterpolants.Light.y = dot(Input.Binormal, LightPosition);
+	 OutFactoryInterpolants.Light.z = dot(Input.Normal, LightPosition);
+#else
+	 OutFactoryInterpolants.Eye = EyeVector.xyz;
+	 OutFactoryInterpolants.Light = LightPosition.xyz;
+#endif
+
+#ifdef USE_SKIN
+	 OutFactoryInterpolants.Normal = mul( float4(Input.Normal, 0 ), GetSkinTransform(Input) ).xyz;
+#else
+	 OutFactoryInterpolants.Normal = Input.Normal;
+#endif
+	
+	// 坐标变换到屏幕
+	OutFactoryInterpolants.Position = mul( LocalPosition, WorldViewProjectionTransform );
+
+}
+

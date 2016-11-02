@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Other">
+      <UniqueIdentifier>{de73712e-9c16-4219-bab0-cf89132c3183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{43de0d73-82b9-405f-a61d-9a9f670eff35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\Source Files">
+      <UniqueIdentifier>{0684ecc8-c7a5-4135-90b1-7190a1f12d55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math\Header Files">
+      <UniqueIdentifier>{8fb09b40-6189-488d-877a-55838013880a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection">
+      <UniqueIdentifier>{994fc783-4f8f-4796-b182-8bc9f7edcfd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection\Header Files">
+      <UniqueIdentifier>{99e14869-51da-4c09-8c1f-d1244230c90d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Reflection\Source Files">
+      <UniqueIdentifier>{49e7969a-dcd1-4d3f-a183-5089022adb63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pack">
+      <UniqueIdentifier>{1c6bc2e2-ec55-4f64-af9f-55ffff758dea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pack\Header Files">
+      <UniqueIdentifier>{73fe95f7-c576-4644-9700-3b4aa27a84dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pack\Source Files">
+      <UniqueIdentifier>{4b487f17-a5e1-45e5-8345-fe34c8d89aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{b500dbf3-9303-46df-9491-baa0741acb04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Header Files">
+      <UniqueIdentifier>{4d3066a1-3a9b-4a5c-8dbb-76edb5cec9a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Source Files">
+      <UniqueIdentifier>{d5e00c86-e744-4112-8408-57a6edc2bdd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic">
+      <UniqueIdentifier>{37d572b5-3a03-42a3-8e9a-51d040898c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic\Header Files">
+      <UniqueIdentifier>{65000106-8e1a-46e4-b6a4-0a025da45c0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Basic\Source Files">
+      <UniqueIdentifier>{04506f5c-409f-4508-b442-c490278fd82c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stream">
+      <UniqueIdentifier>{10e71f9c-94ec-4689-ab59-a85635b81c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stream\Header Files">
+      <UniqueIdentifier>{729314ec-a540-4b85-af08-f3cfdb9d2fe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stream\Source Files">
+      <UniqueIdentifier>{326a6e22-ee9d-4e2c-8621-9651d07adb7b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CoreInitializer.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="CorePCH.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FRect.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersection.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MathLib.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix3.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rotator.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Viewport.cpp">
+      <Filter>Math\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataConv.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataConvA.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NameTable.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Persistence.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Property3.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertySerializer.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RTTIObject.cpp">
+      <Filter>Reflection\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackFile.cpp">
+      <Filter>Pack\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PackSource.cpp">
+      <Filter>Pack\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Clipboard.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CmdLineParser.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Directory.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicLib.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFinder.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KernelObject.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lock.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SyncObject.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeSource.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinControl.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinDesktop.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinFileDialog.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinForm.cpp">
+      <Filter>Platform\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckSum.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Diagnose.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringConv.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelper.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringHelperA.cpp">
+      <Filter>Basic\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DotFile.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeapStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IniFile.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProxyStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RefStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StackStream.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFile.cpp">
+      <Filter>Stream\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Include\Core\CoreInitializer.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="CorePCH.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Math.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Camera.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Color.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\FRect.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Intersection.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\MathLib.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Matrix3.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Matrix4.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Point.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Quaternion.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Rect.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Rotator.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Shape.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Vector2.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Vector3.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Vector4.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Viewport.h">
+      <Filter>Math\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Reflection.h">
+      <Filter>Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DataConv.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DataConvA.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Delegate2.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\EnumObject.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\NameTable.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Persistence.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Property3.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\PropertySerializer.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\RTTIObject.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\SettingObject.h">
+      <Filter>Reflection\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Pack.h">
+      <Filter>Pack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\PackFile.h">
+      <Filter>Pack\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\PackSource.h">
+      <Filter>Pack\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Platform.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Application.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Clipboard.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\CmdLineParser.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Directory.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DynamicLib.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\File.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\FileFinder.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\KernelObject.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Lock.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\SyncObject.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Thread.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\TimeSource.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\WinControl.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\WinDesktop.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\WinFileDialog.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\WinForm.h">
+      <Filter>Platform\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Basic.h">
+      <Filter>Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\CheckSum.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Console.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Diagnose.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DynamicHash.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\EngineType.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\GrowableBuffer.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Link.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\LinkedList.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Log.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Path.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\Pool.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\RefCounting.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\RingBuffer.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\StaticHash.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\StringConv.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\StringHelper.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\StringHelperA.h">
+      <Filter>Basic\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore_Stream.h">
+      <Filter>Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DataStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\DotFile.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\FileStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\HeapStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\IniFile.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\ProxyStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\RefStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\StackStream.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\Core\TextFile.h">
+      <Filter>Stream\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\NekoCore.h" />
+  </ItemGroup>
+</Project>

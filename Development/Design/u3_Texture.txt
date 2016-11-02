@@ -1,0 +1,196 @@
+1. 层次关系
+
+class FTexture : public FRenderResource
+{
+public:
+	/** The texture's RHI resource. */
+	FTextureRHIRef		TextureRHI;						// 纹理指针
+
+	/** The sampler state to use for the texture. */
+	FSamplerStateRHIRef SamplerStateRHI;				// 采样器状态
+
+	/** The last time the texture has been bound */ // 可能用这个实现自动卸载
+	mutable DOUBLE		LastRenderTime;
+	
+	
+	
+
+// 封装线程同步的成员	
+class FTextureResource : public FTexture
+{
+public:
+
+	FRenderCommandFence ReleaseFence;
+
+	FTextureResource()
+	{}
+	virtual ~FTextureResource() {}
+};
+
+
+class FTexture2DResource : public FTextureResource
+{
+	const UTexture2D*	Owner;	// 宿主
+	
+	/** 2D texture version of TextureRHI which is used to lock the 2D texture during mip transitions.		*/
+	// 交换缓冲
+	FTexture2DRHIRef	Texture2DRHI;
+	/** Intermediate texture used to fulfill mip change requests. Swapped in FinalizeMipCount.				*/
+	FTexture2DRHIRef	IntermediateTextureRHI;	
+}
+
+2. 渲染线程中的初始化
+void FTexture2DResource::InitRHI()
+{
+	// 创建D3D对象
+	RHICreateTexture2D
+	
+	// 填充数据
+	void* MipData = RHILockTexture2D( Texture2DRHI, MipIndex - FirstMip, TRUE, DestStride );
+	GetData( MipIndex, MipData );
+	{
+		// 从拥有者UTexture2D获取数据
+		const FTexture2DMipMap& MipMap = Owner->Mips(MipIndex);
+		check( MipData[MipIndex] );
+		// Copy data, not taking into account stride!
+		appMemcpy( Dest, MipData[MipIndex], MipMap.Data.GetBulkDataSize() );
+		// Free data retrieved via GetCopy inside constructor.
+		appFree( MipData[MipIndex] );
+		MipData[MipIndex] = NULL;
+	}
+	RHIUnlockTexture2D( Texture2DRHI, MipIndex - FirstMip );
+	
+	// 创建SamplerState
+	FSamplerStateInitializerRHI SamplerStateInitializer =
+	{
+		Owner->Filter == TF_Linear ? SF_AnisotropicLinear : SF_Nearest,
+		Owner->AddressX == TA_Wrap ? AM_Wrap : (Owner->AddressX == TA_Clamp ? AM_Clamp : AM_Mirror),
+		Owner->AddressY == TA_Wrap ? AM_Wrap : (Owner->AddressY == TA_Clamp ? AM_Clamp : AM_Mirror),
+		AM_Wrap
+	};
+	SamplerStateRHI = RHICreateSamplerState( SamplerStateInitializer );
+}
+
+
+3. 设置
+ShaderManage.h
+
+FORCEINLINE void SetTextureParameter(
+	FCommandContextRHI* Context,
+	FPixelShaderRHIParamRef PixelShader,
+	const FShaderParameter& Parameter,
+	const FTexture* Texture,
+	UINT ElementIndex = 0
+	)
+{
+	if(Parameter.IsBound())
+	{
+		check(ElementIndex < Parameter.GetNumRegisters());
+		Texture->LastRenderTime = GCurrentTime;
+		RHISetSamplerState(Context,PixelShader,Parameter.GetBaseRegisterIndex() + ElementIndex,Texture->SamplerStateRHI,Texture->TextureRHI);
+	}
+}
+
+
+
+4. 从DC创建的字体,使用纹理缓冲数据及存储方法:
+参见TTFontImport.cpp  CreateTextureFromDC
+
+	本函数中,先将TTF字体BMP拷贝到Mipmap数组中保存,
+	
+
+	这里将原数据使用PNG压缩
+	// PNG Compress.
+	FPNGHelper PNG;
+	PNG.InitRaw( Texture->Mips(0).Data.Lock(LOCK_READ_ONLY), Texture->Mips(0).Data.GetBulkDataSize(), Texture->SizeX, Texture->SizeY );
+	TArray<BYTE> CompressedData = PNG.GetCompressedData();
+	check( CompressedData.Num() );
+	Texture->Mips(0).Data.Unlock();
+
+	// 这里估计是制作编辑器中可以直接查看的字体缩略图
+	// Store source art.
+	Texture->SourceArt.Lock(LOCK_READ_WRITE);
+	void* SourceArtPointer = Texture->SourceArt.Realloc( CompressedData.Num() );
+	appMemcpy( SourceArtPointer, CompressedData.GetData(), CompressedData.Num() );
+	Texture->SourceArt.Unlock();
+
+	Texture->CompressionNoMipmaps = 1;
+	Texture->Compress();
+	
+	
+	FImageUtils::ConstructTexture2D函数输入RAW的RGBA数据,并将其制作缩略图并生成UTexture2D对象
+	但这个函数只是用在截取SceneView保存
+	
+5. 纹理的加载
+	虚幻的纹理都是放在包中,而包的加载或异步加载都是放在UObject中做的. 如果涉及到纹理加载,需要由UnEdFact.cpp 
+	加载流程是:
+	UFactory::StaticImportObject
+	
+	根据加载工厂的格式,分别将文件加载为字符串(脚本之类), 或者二进制数组
+	if( Factory->bText )
+			{
+				debugf( NAME_Log, TEXT("FactoryCreateText: %s with %s (%i %i %s)"), *Class->GetName(), *Factories(i)->GetClass()->GetName(), Factory->bCreateNew, Factory->bText, Filename );
+				FString Data;
+				if( appLoadFileToString( Data, Filename ) )
+				{
+					bLoadedFile = true;
+					const TCHAR* Ptr = *Data;
+					Factory->ParseParms( Parms );
+					Result = Factory->FactoryCreateText( Class, InOuter, Name, Flags, NULL, *FFilename(Filename).GetExtension(), Ptr, Ptr+Data.Len(), Warn );
+				}
+			}
+			else
+			{
+				debugf( NAME_Log, TEXT("FactoryCreateBinary: %s with %s (%i %i %s)"), *Class->GetName(), *Factories(i)->GetClass()->GetName(), Factory->bCreateNew, Factory->bText, Filename );
+				TArray<BYTE> Data;
+				if( appLoadFileToArray( Data, Filename ) )
+				{
+					bLoadedFile = true;
+					Data.AddItem( 0 );
+					const BYTE* Ptr = &Data( 0 );
+					Factory->ParseParms( Parms );
+					Result = Factory->FactoryCreateBinary( Class, InOuter, Name, Flags, NULL, *FFilename(Filename).GetExtension(), Ptr, Ptr+Data.Num()-1, Warn );
+				}
+			}
+	
+	具体的工厂决定加载的物件不同,纹理加载依赖 UTextureFactory::FactoryCreateBinary
+	从代码分析,支持FLOAT(浮点纹理), BMP, PCX,TGA, PSD
+	
+	以下显示,虚幻对32位色ARGB格式纹理自动做PNG方式压缩
+	// Compress RGBA textures and also store source art.
+	if( Texture->Format == PF_A8R8G8B8 )
+	{
+		// PNG Compress.
+		FPNGHelper PNG;
+		PNG.InitRaw( Texture->Mips(0).Data.Lock(LOCK_READ_ONLY), Texture->Mips(0).Data.GetBulkDataSize(), Texture->SizeX, Texture->SizeY );
+		TArray<BYTE> CompressedData = PNG.GetCompressedData();
+		Texture->Mips(0).Data.Unlock();
+		check( CompressedData.Num() );
+
+		// Store source art.
+		Texture->SourceArt.Lock(LOCK_READ_WRITE);
+		void* SourceArtPointer = Texture->SourceArt.Realloc( CompressedData.Num() );
+		appMemcpy( SourceArtPointer, CompressedData.GetData(), CompressedData.Num() );
+		Texture->SourceArt.Unlock();
+
+		// PostEditChange below will automatically recompress.
+	}
+	else
+	{
+		Texture->CompressionNone = 1;
+	}
+	
+	新导入的纹理会自动打包为类似DDS的格式
+		// Invalidate any materials using the newly imported texture. (occurs if you import over an existing texture)
+	Texture->PostEditChange(NULL);
+	
+
+6. 编辑器中,各种纹理格式导出
+	这个文件中还包含UTextureExporterXXX这样的类做各种纹理格式的导出操作
+	
+	
+7. 总结下虚幻纹理的流程:
+	磁盘->二进制数组->根据格式加载为RawFile并写入到UTexture的MipData中->使用FPNGHelper将RawData压缩为为PNG格式保存于SourceArt中
+	在编辑器中会自动调用UTexture2D::Compress()将SourceArt中的PNG解压并使用nvDXTLib压缩为DDS DXT格式重新写入MipData中
+	
+	

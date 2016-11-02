@@ -1,0 +1,15 @@
+
+
+
+
+
+
+void BuildParameterInterpolants( float3 InEyeVector, float3 InLightPosition, VertexFactoryInput Input, out VertexFactoryInterpolants OutFactoryInterpolants )
+{
+
+}
+
+
+
+
+

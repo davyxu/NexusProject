@@ -1,0 +1,36 @@
+基本原理：
+
+
+
+FreeType库读取中文时会出现莫名错误，无法正确处理好中文
+
+1. 加载已经制作好的字符纹理缓冲文件
+2. 运行时字符在已缓冲范围内时直接取纹理坐标并绘制,进入渲染线程绘制字模
+3. 不在缓冲范围时，进入渲染线程，收集所有需要缓冲字符列表
+	通过FreetType系统获得字模
+    锁定纹理，写入纹理， 解锁纹理
+4. 退出时根据配置，将纹理和字符纹理坐标写入文件（ 此步骤单独做即制作缓冲文件）
+
+
+类关系：
+1. FontDriver 全局管理器接口
+2. fontname <-映射-> FontFace
+3. FontFace -包含--> FontObject mapped by fontsize
+4. FontObject --包含--> n个RenderTexture2D
+                       m个已缓冲的FontGlyph
+5. FontGlyph --包含-> uv，wh
+
+
+流程：
+IFontObject obj = FontDriver->CreateFont
+	fontname not exit then new FontFace
+		fontsize not exit then new FontObject
+		
+obj->DrawText( text )
+	foreach char in text
+		char no cached?
+			get RenderTexture2D by texture index
+			call CacheGlyph(tex, char)
+			
+obj->CacheGlyph(tex, char )
+	loadchar ,get info, copy glyph

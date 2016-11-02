@@ -1,0 +1,3 @@
+NiIsKindOf           判断类对象是否是一个类型或者该类型的父类型
+ NiIsExactKindOf      判断一个类对象是否为某种类型。但不包含其父类型  
+ NiDynamicCast        动态转换一个类为其原类型或者父类型

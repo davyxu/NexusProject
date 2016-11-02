@@ -1,0 +1,14 @@
+
+sampler2D Texture;
+
+#define RETURN_COLOR( Color ) ( Color )
+
+void Main(
+	in float2 TextureCoordinate : TEXCOORD1,
+	in float4 Color : COLOR,
+	out float4 OutColor : COLOR0
+	)
+{
+	OutColor = tex2D(Texture,TextureCoordinate) * Color;	
+	//OutColor = Color;
+}

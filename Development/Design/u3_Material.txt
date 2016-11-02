@@ -1,0 +1,9 @@
+材质代码生成在MaterialShared.cpp
+
+
+模型相关材质Shader编译代码MeshMaterialShader.cpp
+
+
+材质系统只产生PixelShader( 只有逐像素光照模型 )
+FMaterialPixelShaderParameters MaterialParameters;只是一个散件,被用到其他Shader混合使用
+例如LightRendering.h  class TLightPixelShader

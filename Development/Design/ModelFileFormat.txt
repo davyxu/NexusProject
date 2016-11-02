@@ -1,0 +1,59 @@
+*.msh
+
+"info"
+	dword meshcount
+	
+
+	
+for meshcount
+	"meshdesc%d"
+		wstring name
+		dword vertexcount   对应每个element
+		dword indexcount
+		dword textureindex ...
+
+	"MSE_Position%d"
+
+	"MSE_Normal%d"
+
+	"MSE_TexCoord0%d"
+
+	"MSE_BlendIndices%d"
+
+	"MSE_BlendWeights%d"
+
+	"vertexindex%d"
+
+
+"texture"
+dword texturecount
+	wstring texturename...
+	
+
+
+*.skl
+"bone"
+	dword bonecount
+	
+	wstring name
+	int		parentid
+	Point3	relativeTranslation
+	Quat	relativeRotation
+	Point3	localTranslation
+	Quat	localRotation
+
+
+*.san
+"animation"
+	float	duration
+	dword	trackcount
+	
+		int		boneid
+		dword	keyframecount
+		
+			float	time
+			Point3	translation
+			Quat	rotation
+	
+	
+	

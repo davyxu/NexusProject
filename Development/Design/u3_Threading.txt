@@ -1,0 +1,42 @@
+Tip:
+1. RenderingThread.h 及cpp是渲染处理的唯一地方
+2. FRenderCommand中重载new,让其派生类都从RingBuffer的空间中分配
+
+class FRenderCommand
+{
+public:
+
+	void* operator new(size_t Size,const FRingBuffer::AllocationContext& Allocation)
+	{
+		return Allocation.GetAllocation();
+	}
+
+
+3. ENQUEUE_UNIQUE_RENDER系列宏将渲染指令加入渲染线程Ringbuffer的唯一入口
+
+4. 哪些需要放入渲染线程,哪些不?
+ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+	BeginDrawingCommand,
+	FViewport*,Viewport,this,
+{
+	RHIBeginDrawingViewport(Viewport->ViewportRHI);
+	Viewport->RenderTargetSurfaceRHI = RHIGetViewportBackBuffer(Viewport->ViewportRHI);
+});
+
+FCanvas Canvas(this,NULL);  // 这里是重点, 每帧在游戏线程分配新的缓冲, 避免全局公用一个造成的线程数据共享问题
+{
+	ViewportClient->Draw(this,&Canvas);	// 这个函数内会将多边形数据缓冲于Canvas对象中
+}
+
+Canvas.Flush();		// 将缓冲的数据放入渲染队列
+
+ENQUEUE_UNIQUE_RENDER_COMMAND_TWOPARAMETER(
+	EndDrawingCommand,
+	FViewport*,Viewport,this,
+	UBOOL,bLockToVsync,bLockToVsync,
+{
+	RHIEndDrawingViewport(Viewport->ViewportRHI,TRUE,bLockToVsync);
+});
+
+
+5. 

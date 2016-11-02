@@ -1,0 +1,48 @@
+
+
+HitProxy的RT的创建
+
+void FViewport::FHitProxyMap::Init(UINT NewSizeX,UINT NewSizeY)
+{
+	SizeX = NewSizeX;
+	SizeY = NewSizeY;
+
+	// Create a render target to store the hit proxy map.
+	RenderTargetSurfaceRHI = RHICreateTargetableSurface(
+		SizeX,SizeY,PF_A8R8G8B8,FTexture2DRHIRef(),TargetSurfCreate_Dedicated|TargetSurfCreate_Readable,TEXT("HitProxyColor"));
+}
+
+这里使用的是D3DRenderTarget.cpp(177)中的方法，根据实测，这种方法比纹理带的Surface做RT，要快2.5倍（少了一次纹理Resolve）
+			TD3DRef<IDirect3DSurface9> Surface;
+			VERIFYD3DRESULT(GDirect3DDevice->CreateRenderTarget(
+				SizeX,
+				SizeY,
+				(D3DFORMAT)GPixelFormats[Format].PlatformFormat,
+				D3DMULTISAMPLE_NONE,
+				0,
+				(Flags&TargetSurfCreate_Readable),
+				Surface.GetInitReference(),
+				NULL
+				));
+
+在void FViewport::GetHitProxyMap(UINT MinX,UINT MinY,UINT MaxX,UINT MaxY,TArray<HHitProxy*>& OutMap)
+中，将RT设置为
+RHISetRenderTarget(NULL,Viewport->HitProxyMap.RenderTargetSurfaceRHI, FSurfaceRHIRef());
+绘制带有hitpoxyid（color）的物体，
+
+	ENQUEUE_UNIQUE_RENDER_COMMAND_ONEPARAMETER(
+		ReadSurfaceCommand,
+		FReadSurfaceContext,Context,ReadSurfaceContext,
+		{
+			RHIReadSurfaceData(
+				Context.Viewport->HitProxyMap.RenderTargetSurfaceRHI,
+				Context.MinX,
+				Context.MinY,
+				Context.MaxX,
+				Context.MaxY,
+				*Context.OutData
+				);
+		});
+	FlushRenderingCommands();
+	
+	回读像素数据，以上函数调用是在EndScene之外

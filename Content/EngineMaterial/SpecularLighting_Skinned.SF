@@ -1,0 +1,89 @@
+#include "Material.SF"
+
+// 外部访问变量定义
+sampler2D UniformTexture0; // EngineModel.Shark.shark_hurt_heavy.DDS
+
+
+// 自发光
+float3 GetMaterialEmissive( MaterialParameters Parameters )
+{
+	float3 Local1 = float3(0.0f,0.0f,0.0f);
+
+	return Local1;
+}
+
+// 漫反射
+float3 GetMaterialDiffuseColor(MaterialParameters Parameters)
+{
+	float2 Local2 = Parameters.TexCoords;
+	float4 Local3 = tex2D( UniformTexture0, Local2 );
+
+	return Local3.rgb;
+}
+
+// 法线
+float3 GetMaterialNormal(MaterialParameters Parameters)
+{
+	float3 Local4 = Parameters.VertexNormal;
+
+	return Local4;
+}
+
+// 高光
+float3 GetMaterialSpecularColor(MaterialParameters Parameters)
+{
+ 	float4 Local5 = float4( 1.000000, 1.000000, 1.000000, 1.000000 );
+
+	return Local5.rgb;
+}
+
+float GetMaterialSpecularPower(MaterialParameters Parameters)
+{
+ 	float  Local6 = 16.0f;
+
+	return Local6;
+}
+
+// 不透明度
+float GetMaterialOpacity( MaterialParameters Parameters )
+{
+ 	float  Local7 = 1.0f;
+
+	return Local7;
+}
+
+
+float3 GetMaterialPointLightTransfer( MaterialParameters Parameters )
+{
+      return PointLightPhong(
+      GetMaterialEmissive(Parameters),
+      GetMaterialDiffuseColor(Parameters),
+      GetMaterialSpecularColor(Parameters),
+      GetMaterialSpecularPower(Parameters),
+      Parameters.TangentLightVector,
+      Parameters.TangentCameraVector,
+      Parameters.TangentNormal,
+      Parameters.TangentReflectionVector
+      );
+}
+
+
+float4 Main(       
+      float2 TexCoord : TEXCOORD0,
+      float3 Eye      : TEXCOORD5,
+      float3 Light    : TEXCOORD6,
+      float3 Normal   : TEXCOORD7 
+      ) : COLOR0
+{
+   MaterialParameters Parameters;
+   Parameters.TexCoords = TexCoord;
+   Parameters.TangentLightVector = normalize(Light);
+   Parameters.TangentCameraVector = normalize(Eye);
+   Parameters.VertexNormal = Normal;
+   Parameters.TangentNormal = GetMaterialNormal( Parameters );
+   Parameters.TangentReflectionVector = normalize(reflect(-Parameters.TangentLightVector, Parameters.TangentNormal));
+   
+
+   return float4( GetMaterialPointLightTransfer( Parameters ),	GetMaterialOpacity( Parameters ) );
+}
+

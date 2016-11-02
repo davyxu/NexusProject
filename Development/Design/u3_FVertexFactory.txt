@@ -1,0 +1,150 @@
+1. 功能：VD+VB+VS+ShaderParameter
+
+参见TerrainVertexFactory.h
+
+class FTerrainVertexFactory : public FVertexFactory
+{
+	DECLARE_VERTEX_FACTORY_TYPE(FTerrainVertexFactory);
+
+public:
+	struct DataType
+	{
+		/** The stream to read the vertex position from.		*/
+		FVertexStreamComponent PositionComponent;
+		/** The stream to read the vertex displacement from.	*/
+		FVertexStreamComponent DisplacementComponent;
+		/** The stream to read the vertex gradients from.		*/
+		FVertexStreamComponent GradientComponent;
+	};
+
+	
+struct FVertexStreamComponent
+{
+	/** The vertex buffer to stream data from.  If null, no data can be read from this stream. */
+	const FVertexBuffer* VertexBuffer;
+
+	/** The offset of the data, relative to the beginning of each element in the vertex buffer. */
+	BYTE Offset;
+
+	/** The stride of the data. */
+	BYTE Stride;
+
+	/** The type of the data read from this stream. */
+	BYTE Type;
+	
+
+地形这里是采用多流设计
+
+
+2. 初始化
+这里的初始化类似于D3DAPI
+void FTerrainVertexFactory::InitRHI()
+{
+	// list of declaration items
+	FVertexDeclarationElementList Elements;
+
+	// position decls
+	Elements.AddItem(AccessStreamComponent(Data.PositionComponent, VEU_Position));
+	// displacement
+	Elements.AddItem(AccessStreamComponent(Data.DisplacementComponent, VEU_BlendWeight));
+	// gradients
+	Elements.AddItem(AccessStreamComponent(Data.GradientComponent, VEU_Tangent));
+
+	// create the actual device decls
+	//@todo.SAS. Include shadow map and light map
+	InitDeclaration(Elements,FALSE,FALSE);
+}
+
+
+
+3. Shader变量绑定
+
+class FVertexFactoryShaderParameters
+{
+public:
+	virtual ~FVertexFactoryShaderParameters() {}
+	virtual void Bind(const class FShaderParameterMap& ParameterMap) = 0;
+	virtual void Serialize(FArchive& Ar) = 0;
+	virtual void Set(FCommandContextRHI* Context,const FShader* VertexShader,const class FVertexFactory* VertexFactory,const FSceneView* View) const = 0;
+	virtual void SetLocalTransforms(FCommandContextRHI* Context,const FShader* VertexShader,const FMatrix& LocalToWorld,const FMatrix& WorldToLocal) const = 0;
+};
+
+
+FShaderParameter 中只记录与Shader寄存器相关的信息
+	virtual void FTerrainDecalVertexFactoryShaderParameters::Bind(const FShaderParameterMap& ParameterMap)
+	{
+		Super::Bind( ParameterMap );
+		WorldToDecalParameter.Bind( ParameterMap, TEXT("WorldToDecal"), TRUE );
+		DecalLocationParameter.Bind( ParameterMap, TEXT("DecalLocation"), TRUE );
+		DecalOffsetParameter.Bind( ParameterMap, TEXT("DecalOffset"), TRUE );
+	}
+
+
+	设置参数
+	
+	virtual void FTerrainDecalVertexFactoryShaderParameters::Set(FCommandContextRHI* Context,const FShader* VertexShader,const FVertexFactory* VertexFactory,const FSceneView* View) const
+	{
+		Super::Set( Context, VertexShader, VertexFactory, View );
+
+		FTerrainDecalVertexFactory* TerrainDVF = (FTerrainDecalVertexFactory*)VertexFactory;
+		if ( WorldToDecalParameter.IsBound() )  // 如果这个寄存器存在
+		{
+			SetVertexShaderValue( Context, VertexShader->GetVertexShader(), WorldToDecalParameter, TerrainDVF->GetDecalMatrix() );
+		}
+		if ( DecalLocationParameter.IsBound() )
+		{
+			SetVertexShaderValue( Context, VertexShader->GetVertexShader(), DecalLocationParameter, TerrainDVF->GetDecalLocation() );
+		}
+		if ( DecalOffsetParameter.IsBound() )
+		{
+			SetVertexShaderValue( Context, VertexShader->GetVertexShader(), DecalOffsetParameter, TerrainDVF->GetDecalOffset() );
+		}
+	}
+	
+	
+4. 注册及管理
+每个VertexFactor的实现都需要用以下宏注册
+IMPLEMENT_VERTEX_FACTORY_TYPE(FGPUSkinVertexFactory, FGPUSkinVertexFactoryShaderParameters, "GpuSkinVertexFactory", TRUE, FALSE, VER_GPUSKIN_MAX_INFLUENCES_OPTIMIZATION);
+
+
+#define IMPLEMENT_VERTEX_FACTORY_TYPE(Name,ShaderParametersType,ShaderFilename,bUsedWithMaterials,bSupportsStaticLighting,InMinPackageVersion) \
+	FVertexFactoryShaderParameters* Construct##Name##ShaderParameters() { return new ShaderParametersType(); } \  // 这里函数在FVertexFactoryType的构造函数内被注册
+	FVertexFactoryType Name::StaticType(TEXT(#Name),TEXT(ShaderFilename),bUsedWithMaterials,bSupportsStaticLighting,Construct##Name##ShaderParameters, Name::ShouldCache, InMinPackageVersion);
+
+	
+FVertexFactoryType的构造函数用于将VF添加到全局列表中管理
+FVertexFactoryType::FVertexFactoryType(
+	const TCHAR* InName,
+	const TCHAR* InShaderFilename,
+	UBOOL bInUsedWithMaterials,
+	UBOOL bInSupportsStaticLighting,
+	ConstructParametersType InConstructParameters,
+	ShouldCacheType InShouldCache,
+	INT InMinPackageVersion
+	):
+	Name(InName),
+	ShaderFilename(InShaderFilename),
+	bUsedWithMaterials(bInUsedWithMaterials),
+	bSupportsStaticLighting(bInSupportsStaticLighting),
+	ConstructParameters(InConstructParameters),
+	ShouldCacheRef(InShouldCache),
+	MinPackageVersion(InMinPackageVersion)
+{
+	// Add this vertex factory type to the global list.
+	(new TLinkedList<FVertexFactoryType*>(this))->Link(GetTypeList());
+
+	// Assign the vertex factory type the next unassigned hash index.
+	static DWORD NextHashIndex = 0;
+	HashIndex = NextHashIndex++;
+}
+
+5. VB Stream的设置
+
+void FVertexFactory::Set(FCommandContextRHI* Context) const
+{
+	// Set the predefined vertex streams.
+	for(UINT StreamIndex = 0;StreamIndex < Streams.Num();StreamIndex++)
+	{
+		RHISetStreamSource(Context,StreamIndex,Streams(StreamIndex).VertexBuffer->VertexBufferRHI,Streams(StreamIndex).Stride);
+	}
+}

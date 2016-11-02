@@ -1,0 +1,19 @@
+虚幻3中没有采用OGRE的SceneNode来管理场景
+OGRE中的SceneNode功能强大的有点过，节点其实不需要公转自转这类复杂的结构
+
+虚幻中的每个场景物体基类为AActor，凡是带A前缀的类，均为AActor派生
+功能有：
+基本的位置旋转及缩放
+时间控制等等
+
+UActorFactory为Actor工厂，派生类有
+UActorFactoryStaticMesh
+UActorFactorySkeletalMesh
+等等
+
+
+Actor由World拥有
+
+
+场景渲染主要流程
+void FSceneRenderer::Render()
